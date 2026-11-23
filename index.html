@@ -1641,6 +1641,343 @@
       `;
     }
 
+    function updatePlayerName(val) {
+      gameState.playerName = String(val || '').slice(0, 24);
+      saveState();
+    }
+
+    function playWelcomeVoice() {
+      sfxClick();
+      speakText("Hello, students! Are you ready to learn colours? Let's play and have fun!", true);
+      showToast('🗣️ "Hello, students! Let\'s play and have fun!"', 'info');
+    }
+
+    function startAdventure() {
+      getAudioCtx();
+      sfxClick();
+      if (gameState.soundEnabled) {
+        speakText("Hello, students! Are you ready to learn colours? Let's play and have fun!");
+      }
+      navigateTo('menu');
+    }
+
+    function openHowToPlayModal() {
+      sfxClick();
+      openModal(`
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-2xl font-bold text-sky-700">📖 How to Play</h2>
+            <button onclick="closeModal()" class="btn-game bg-rose-500 text-white border-rose-700 px-3 py-1 text-sm">✖</button>
+          </div>
+          <div class="space-y-3 text-sm sm:text-base text-slate-700 font-semibold">
+            <div class="p-3.5 rounded-2xl bg-sky-50 border-2 border-sky-200">
+              <strong>1. Explore 8 Fun Levels:</strong> Start with <em>Learn Colours</em>, play guessing, matching, colouring, and speaking games, then explore real objects using your camera!
+            </div>
+            <div class="p-3.5 rounded-2xl bg-amber-50 border-2 border-amber-200">
+              <strong>2. Collect Points & Stars:</strong> Earn <strong>10 points</strong> for correct answers and camera challenges. Unlock up to <strong>3 Stars</strong> per level!
+            </div>
+            <div class="p-3.5 rounded-2xl bg-purple-50 border-2 border-purple-200">
+              <strong>3. Camera Mode (Levels 6 & 7):</strong> Allow camera access, hold a colourful object inside the scanning box, and tap <strong>SCAN</strong>! Everything runs 100% locally in your browser.
+            </div>
+            <div class="p-3.5 rounded-2xl bg-emerald-50 border-2 border-emerald-200">
+              <strong>4. Listen & Repeat:</strong> Tap the 🔊 buttons anytime to hear English pronunciation and practice saying sentences like <em>"It is red."</em>
+            </div>
+          </div>
+          <div class="mt-5 text-center">
+            <button onclick="closeModal()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-8 py-3 text-lg">
+              GOT IT! LET'S PLAY 🚀
+            </button>
+          </div>
+        </div>
+      `);
+    }
+
+    /* =========================================================
+       8. MAIN MENU (8 INTERACTIVE GAME LEVELS)
+       ========================================================= */
+    const LEVELS_META = [
+      {
+        num: 1,
+        screen: 'level1',
+        title: '1. LEARN COLOURS',
+        desc: 'Explore 12 colour cards with pictures, audio & sentences.',
+        icon: '🎨',
+        svgId: 'red',
+        bg: 'from-rose-50 to-red-100',
+        border: 'border-rose-300',
+        btn: 'bg-rose-500 border-rose-700'
+      },
+      {
+        num: 2,
+        screen: 'level2',
+        title: '2. GUESS THE COLOUR',
+        desc: 'Look at 12 object pictures and pick the correct colour!',
+        icon: '🍎',
+        svgId: 'yellow',
+        bg: 'from-orange-50 to-amber-100',
+        border: 'border-orange-300',
+        btn: 'bg-orange-500 border-orange-700'
+      },
+      {
+        num: 3,
+        screen: 'level3',
+        title: '3. MATCHING COLOURS',
+        desc: 'Drag & drop 12 English colour words to their colour cards.',
+        icon: '🧩',
+        svgId: 'green',
+        bg: 'from-amber-50 to-yellow-100',
+        border: 'border-amber-300',
+        btn: 'bg-amber-500 border-amber-700'
+      },
+      {
+        num: 4,
+        screen: 'level4',
+        title: '4. COLOUR THE OBJECTS',
+        desc: 'Follow English instructions to paint 8 cute drawings!',
+        icon: '🖍️',
+        svgId: 'pink',
+        bg: 'from-emerald-50 to-green-100',
+        border: 'border-emerald-300',
+        btn: 'bg-emerald-500 border-emerald-700'
+      },
+      {
+        num: 5,
+        screen: 'level5',
+        title: '5. WHAT COLOUR IS IT?',
+        desc: 'Answer questions and practise speaking "It is ..." aloud!',
+        icon: '🎤',
+        svgId: 'blue',
+        bg: 'from-sky-50 to-blue-100',
+        border: 'border-sky-300',
+        btn: 'bg-sky-500 border-sky-700'
+      },
+      {
+        num: 6,
+        screen: 'level6',
+        title: '6. SCAN THE COLOUR',
+        desc: 'Real-world Camera Detector! Scan any object around you.',
+        icon: '📷',
+        svgId: 'purple',
+        bg: 'from-purple-50 to-fuchsia-100',
+        border: 'border-purple-400',
+        btn: 'bg-purple-600 border-purple-800',
+        featured: true
+      },
+      {
+        num: 7,
+        screen: 'level7',
+        title: '7. COLOUR HUNT CHALLENGE',
+        desc: 'Find real objects matching 12 fun camera colour missions!',
+        icon: '🔍',
+        svgId: 'orange',
+        bg: 'from-pink-50 to-rose-100',
+        border: 'border-pink-300',
+        btn: 'bg-pink-500 border-pink-700'
+      },
+      {
+        num: 8,
+        screen: 'level8',
+        title: '8. FINAL QUIZ',
+        desc: 'Test your skills with 20 randomized colour quiz questions!',
+        icon: '🏆',
+        svgId: 'gold',
+        bg: 'from-teal-50 to-cyan-100',
+        border: 'border-teal-300',
+        btn: 'bg-teal-500 border-teal-700'
+      }
+    ];
+
+    function renderMainMenu() {
+      const root = document.getElementById('appRoot');
+      const totalStars = getTotalStars();
+      const completedCount = getCompletedLevelsCount();
+      const overallPct = Math.round((completedCount / 8) * 100);
+      const rank = getStarRank(totalStars);
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-6xl mx-auto">
+          <!-- Student Progress Banner -->
+          <div class="game-card p-5 sm:p-6 mb-6 border-4 border-sky-200">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-display font-bold text-xs sm:text-sm mb-1.5">
+                  <span>${rank.badge}</span>
+                  <span>Rank: ${rank.label}</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">
+                  Hi, <span class="text-sky-600">${escapeHtml(gameState.playerName.trim() || 'Explorer')}</span>! Choose Your Adventure 🌈
+                </h1>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2.5">
+                <div class="bg-yellow-50 border-2 border-yellow-300 px-3.5 py-2 rounded-2xl text-center">
+                  <div class="text-xs font-bold text-yellow-700">Total Stars</div>
+                  <div class="font-display font-bold text-lg text-yellow-600">⭐ ${totalStars} / 24</div>
+                </div>
+                <div class="bg-emerald-50 border-2 border-emerald-300 px-3.5 py-2 rounded-2xl text-center">
+                  <div class="text-xs font-bold text-emerald-700">Completed</div>
+                  <div class="font-display font-bold text-lg text-emerald-600">${completedCount} / 8</div>
+                </div>
+                <button onclick="navigateTo('results')" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-4 py-2.5 text-sm">
+                  🏅 My Results
+                </button>
+              </div>
+            </div>
+
+            <div class="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-rose-400 via-yellow-400 to-emerald-500 transition-all duration-500" style="width:${overallPct}%"></div>
+            </div>
+          </div>
+
+          <!-- 8 Level Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            ${LEVELS_META.map(lv => {
+              const lp = gameState.levelProgress[lv.num] || { completed: false, stars: 0, best: 0 };
+              const starsStr = '⭐'.repeat(lp.stars || 0) + '☆'.repeat(3 - (lp.stars || 0));
+              return `
+                <div
+                  onclick="navigateTo('${lv.screen}')"
+                  class="game-card game-card-hover cursor-pointer p-5 flex flex-col justify-between bg-gradient-to-br ${lv.bg} border-4 ${lv.border} relative overflow-hidden"
+                >
+                  ${lv.featured ? `
+                    <span class="absolute top-2.5 right-2.5 bg-purple-600 text-white text-[10px] font-display font-bold px-2.5 py-0.5 rounded-full shadow">
+                      ✨ FEATURED
+                    </span>
+                  ` : ''}
+
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-3xl">${lv.icon}</span>
+                      <div class="opacity-90">${getObjectSVG(lv.svgId, 'w-12 h-12')}</div>
+                    </div>
+                    <h2 class="font-display font-bold text-lg text-slate-800 leading-snug mb-1">${lv.title}</h2>
+                    <p class="text-xs sm:text-sm text-slate-600 font-semibold mb-4">${lv.desc}</p>
+                  </div>
+
+                  <div>
+                    <div class="flex items-center justify-between text-xs font-bold mb-2.5">
+                      <span class="text-amber-500 text-base tracking-wider">${starsStr}</span>
+                      <span class="${lp.completed ? 'text-emerald-700 bg-emerald-100' : 'text-slate-600 bg-white/80'} px-2 py-0.5 rounded-lg">
+                        ${lp.completed ? '✓ Done' : `${lp.best || 0}%`}
+                      </span>
+                    </div>
+                    <button class="btn-game ${lv.btn} text-white w-full py-2.5 text-sm">
+                      PLAY LEVEL ▶
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    /* =========================================================
+       9. LEVEL 1: LEARN COLOURS (12 INTERACTIVE VOCAB CARDS)
+       ========================================================= */
+    function renderLevel1Learn() {
+      const root = document.getElementById('appRoot');
+      const learnedCount = gameState.learnedCards.length;
+      const pct = Math.round((learnedCount / COLOURS.length) * 100);
+      const fav = COLOUR_MAP[gameState.favouriteColour] || COLOUR_MAP.blue;
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-6xl mx-auto">
+          <!-- Level Header -->
+          <div class="game-card p-5 mb-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-rose-600">🎨 Level 1: Learn Colours</h2>
+                <p class="text-xs sm:text-sm text-slate-600 font-semibold">
+                  Tap any colour card to zoom in, hear pronunciation, and learn an English sentence!
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-xl font-display font-bold text-sm">
+                  Explored: ${learnedCount} / 12
+                </span>
+                <button onclick="navigateTo('level2')" class="btn-game bg-emerald-500 text-white border-emerald-700 px-4 py-2 text-sm">
+                  Next: Guess ▶
+                </button>
+              </div>
+            </div>
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-rose-400 via-amber-400 to-emerald-400 transition-all duration-300" style="width:${pct}%"></div>
+            </div>
+          </div>
+
+          <!-- 12 Vocabulary Cards Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 mb-6">
+            ${COLOURS.map(c => {
+              const isLearned = gameState.learnedCards.includes(c.id);
+              return `
+                <div
+                  onclick="openLearnCardModal('${c.id}')"
+                  class="game-card game-card-hover cursor-pointer p-3.5 sm:p-4 flex flex-col justify-between border-4 relative"
+                  style="border-color:${c.border};"
+                >
+                  ${isLearned ? `
+                    <span class="absolute top-2 right-2 w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center shadow">✓</span>
+                  ` : ''}
+
+                  <div>
+                    <div
+                      class="w-full py-3 rounded-2xl text-center mb-2.5 border-2 shadow-inner ${c.isGold ? 'gold-swatch' : ''}"
+                      style="${c.isGold ? '' : `background:${c.hex};`} border-color:${c.border};"
+                    >
+                      <div class="font-display font-bold text-lg sm:text-xl ${c.textDark ? 'text-slate-900' : 'text-white'}">${c.name}</div>
+                      <div class="text-xs font-bold ${c.textDark ? 'text-slate-700' : 'text-white/90'}">${c.indo}</div>
+                    </div>
+
+                    <div class="flex justify-center my-1.5">${getObjectSVG(c.id, 'w-20 h-20')}</div>
+
+                    <div class="text-center mb-2.5">
+                      <div class="font-display font-bold text-sm text-slate-800">${c.object} (${c.objectIndo})</div>
+                      <div class="text-xs text-slate-600 font-semibold italic">"${c.sentence}"</div>
+                    </div>
+                  </div>
+
+                  <button
+                    onclick="event.stopPropagation(); speakColourCard('${c.id}')"
+                    class="btn-game bg-sky-500 text-white border-sky-700 w-full py-2 text-xs sm:text-sm"
+                  >
+                    🔊 Listen
+                  </button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Favourite Colour Sentence Practice -->
+          <div class="game-card p-5 sm:p-6 border-4 border-sky-200 text-center">
+            <h3 class="text-xl sm:text-2xl font-display font-bold text-sky-700 mb-1">
+              💖 What is Your Favourite Colour?
+            </h3>
+            <p class="text-lg sm:text-2xl font-display font-bold text-slate-800 mb-4">
+              "My favourite colour is <span class="underline decoration-4" style="color:${fav.id === 'white' || fav.id === 'yellow' ? '#1E293B' : fav.border};">${fav.display.toLowerCase()}</span>."
+            </p>
+            <div class="flex flex-wrap justify-center gap-2 mb-4">
+              ${COLOURS.map(c => `
+                <button
+                  onclick="selectFavouriteColour('${c.id}')"
+                  class="px-3 py-1.5 rounded-xl font-display font-bold text-xs sm:text-sm border-2 transition-transform cursor-pointer ${
+                    gameState.favouriteColour === c.id ? 'ring-4 ring-sky-400 scale-105' : 'hover:scale-105'
+                  } ${c.isGold ? 'gold-swatch' : ''}"
+                  style="${c.isGold ? '' : `background:${c.hex};`} border-color:${c.border}; color:${c.textDark ? '#0F172A' : '#FFFFFF'};"
+                >
+                  ${c.display}
+                </button>
+              `).join('')}
+            </div>
+            <button onclick="speakText('My favourite colour is ${fav.display.toLowerCase()}.', true)" class="btn-game bg-purple-500 text-white border-purple-700 px-6 py-2.5 text-sm sm:text-base">
+              🗣️ Say My Favourite Colour
+            </button>
+          </div>
+        </section>
+      `;
+    }
+
     function speakColourCard(colourId) {
       const c = COLOUR_MAP[colourId];
       if (!c) return;
