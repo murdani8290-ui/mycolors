@@ -1,0 +1,3704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="A. SUSILAWATI - SMAN 10 PINRANG" />
+  <title>My Colours Adventure – Let's Explore the World of Colours!</title>
+
+  <!-- Tailwind CSS CDN for responsive layout and utility styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Friendly child-oriented Google Fonts with safe system fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================================
+       CUSTOM GAME DESIGN TOKENS & ANIMATIONS
+       ========================================================= */
+    :root {
+      --font-display: 'Fredoka', 'Comic Sans MS', system-ui, sans-serif;
+      --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, #E0F2FE 0%, #FEF9C3 48%, #FCE7F3 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #1E293B;
+      margin: 0;
+    }
+
+    h1, h2, h3, h4, .font-display {
+      font-family: var(--font-display);
+    }
+
+    /* Animated Rainbow Background Arc */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(8px) rotate(3deg); }
+    }
+
+    @keyframes pulseGentle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes shakeWrong {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+
+    @keyframes bounceSuccess {
+      0%, 100% { transform: translateY(0) scale(1); }
+      40% { transform: translateY(-12px) scale(1.08); }
+      70% { transform: translateY(-4px) scale(1.02); }
+    }
+
+    @keyframes scanLaser {
+      0% { top: 8%; opacity: 0.9; }
+      50% { top: 88%; opacity: 1; }
+      100% { top: 8%; opacity: 0.9; }
+    }
+
+    @keyframes rainbowDraw {
+      0% { stroke-dashoffset: 600; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes screenFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-float { animation: floatSlow 3.6s ease-in-out infinite; }
+    .animate-float-rev { animation: floatReverse 4.2s ease-in-out infinite; }
+    .animate-pulse-gentle { animation: pulseGentle 2.4s ease-in-out infinite; }
+    .animate-pop { animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .animate-shake { animation: shakeWrong 0.45s ease-in-out; }
+    .animate-bounce-success { animation: bounceSuccess 0.55s ease-in-out; }
+    .animate-spin-slow { animation: spinSlow 24s linear infinite; }
+    .screen-enter { animation: screenFadeIn 0.32s ease-out forwards; }
+
+    .rainbow-arc {
+      stroke-dasharray: 600;
+      animation: rainbowDraw 1.8s ease-out forwards;
+    }
+
+    /* Tactile 3D Cartoon Game Buttons */
+    .btn-game {
+      font-family: var(--font-display);
+      font-weight: 700;
+      border-radius: 1.25rem;
+      border-bottom-width: 5px;
+      transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-game:hover:not(:disabled) {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+
+    .btn-game:active:not(:disabled) {
+      transform: translateY(3px);
+      border-bottom-width: 2px;
+    }
+
+    .btn-game:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    /* Game Card Polish */
+    .game-card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(8px);
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.09), 0 4px 10px -4px rgba(15, 23, 42, 0.05);
+      border-radius: 1.75rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .game-card-hover:hover {
+      transform: translateY(-5px) scale(1.015);
+      box-shadow: 0 18px 32px -6px rgba(15, 23, 42, 0.14);
+    }
+
+    /* Drag & Drop Specifics */
+    .drag-chip {
+      touch-action: none;
+      user-select: none;
+      cursor: grab;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .drag-chip:active {
+      cursor: grabbing;
+    }
+
+    .drop-zone {
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .drop-zone.drop-active {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.45);
+      border-color: #2563EB !important;
+    }
+
+    /* Colouring SVG Interactive Parts */
+    .colourable-part {
+      cursor: pointer;
+      transition: fill 0.22s ease, filter 0.15s ease;
+    }
+
+    .colourable-part:hover {
+      filter: brightness(0.95) drop-shadow(0 0 4px rgba(59, 130, 246, 0.5));
+    }
+
+    /* Camera Scanner Laser */
+    .scanner-laser {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      height: 4px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, #22C55E, #FACC15, #22C55E, transparent);
+      box-shadow: 0 0 12px #22C55E;
+      animation: scanLaser 2.2s ease-in-out infinite;
+    }
+
+    /* Confetti Canvas Overlay */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Custom Scrollbar for Modals */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #94A3B8;
+      border-radius: 999px;
+    }
+
+    /* Metallic Gold Swatch Effect */
+    .gold-swatch {
+      background: linear-gradient(135deg, #FEF08A 0%, #EAB308 45%, #B45309 100%);
+    }
+
+    /* Rainbow Text Gradient */
+    .rainbow-title {
+      background: linear-gradient(90deg, #EF4444, #F97316, #EAB308, #22C55E, #3B82F6, #9333EA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body class="selection:bg-yellow-200 selection:text-slate-900">
+
+  <!-- Fullscreen Confetti Canvas -->
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <!-- Toast Notification Banner (Replaces native alert()) -->
+  <div id="toastContainer" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-md pointer-events-none flex flex-col gap-2 items-center"></div>
+
+  <!-- Star Reward Popup Overlay -->
+  <div id="starPopup" class="fixed inset-0 z-[95] hidden items-center justify-center bg-slate-900/45 backdrop-blur-sm p-4">
+    <div class="game-card max-w-sm w-full p-6 text-center animate-pop border-4 border-yellow-300">
+      <div id="starPopupIcons" class="text-5xl mb-2 flex justify-center gap-2">⭐</div>
+      <h3 id="starPopupTitle" class="text-2xl font-bold text-amber-500 mb-1">NEW STAR EARNED!</h3>
+      <p id="starPopupMsg" class="text-slate-600 font-semibold mb-4">You are doing amazing!</p>
+      <button onclick="closeStarPopup()" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-6 py-2.5 text-lg w-full">
+        AWESOME! 🎉
+      </button>
+    </div>
+  </div>
+
+  <!-- Top Navigation & Status HUD -->
+  <header id="topHud" class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b-4 border-sky-200 shadow-sm hidden">
+    <div class="max-w-6xl mx-auto px-3 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-2">
+      <!-- Left: Navigation & Branding -->
+      <div class="flex items-center gap-2">
+        <button id="hudHomeBtn" onclick="navigateTo('menu')" class="btn-game bg-sky-500 text-white border-sky-700 px-3 py-1.5 text-sm sm:text-base" title="Main Menu">
+          <span>🏠</span><span class="hidden sm:inline">Menu</span>
+        </button>
+        <div class="flex items-center gap-1.5 bg-gradient-to-r from-pink-100 via-yellow-100 to-sky-100 px-3 py-1.5 rounded-2xl border-2 border-white shadow-inner">
+          <span class="text-lg">🌈</span>
+          <span id="hudPlayerName" class="font-display font-bold text-slate-700 text-sm sm:text-base max-w-[110px] sm:max-w-[160px] truncate">Explorer</span>
+        </div>
+      </div>
+
+      <!-- Center/Right: Score, Stars, Audio Controls, Teacher Panel -->
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
+        <div class="flex items-center gap-1 bg-amber-100 border-2 border-amber-300 text-amber-800 px-2.5 py-1 rounded-xl font-display font-bold text-sm sm:text-base" title="Total Score">
+          <span>🏆</span><span id="hudScore">0</span>
+        </div>
+        <div class="flex items-center gap-1 bg-yellow-100 border-2 border-yellow-300 text-yellow-800 px-2.5 py-1 rounded-xl font-display font-bold text-sm sm:text-base" title="Total Stars">
+          <span>⭐</span><span id="hudStars">0</span>
+        </div>
+        <button id="hudSoundBtn" onclick="toggleSound()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-2.5 py-1.5 text-xs sm:text-sm" title="Sound & Voice ON/OFF">
+          🔊
+        </button>
+        <button id="hudMusicBtn" onclick="toggleMusic()" class="btn-game bg-purple-500 text-white border-purple-700 px-2.5 py-1.5 text-xs sm:text-sm" title="Background Music ON/OFF">
+          🎵
+        </button>
+        <button onclick="openTeacherModal()" class="btn-game bg-slate-700 text-white border-slate-900 px-2.5 py-1.5 text-xs sm:text-sm" title="Teacher Panel (Mode Guru)">
+          <span>👩‍🏫</span><span class="hidden md:inline">Guru</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Viewport -->
+  <main id="appRoot" class="max-w-6xl mx-auto px-3 sm:px-5 py-4 sm:py-6 pb-10 min-h-[calc(100vh-120px)]">
+    <!-- Dynamic Screens Rendered Here -->
+  </main>
+
+  <!-- Creator Credit Footer -->
+  <footer class="w-full py-4 px-4 text-center">
+    <div class="inline-flex flex-wrap items-center justify-center gap-2 bg-white/85 backdrop-blur-sm border-2 border-sky-200 px-4 py-1.5 rounded-full shadow-sm text-xs sm:text-sm font-display font-bold text-slate-600">
+      <span>👩‍🏫 Created by:</span>
+      <span class="text-sky-700">A. SUSILAWATI</span>
+      <span class="text-slate-400">•</span>
+      <span class="text-purple-700">SMAN 10 PINRANG</span>
+    </div>
+  </footer>
+
+  <!-- Generic Modal Backdrop for How To Play, Learn Card Zoom, Teacher Panel, Confirmations -->
+  <div id="modalOverlay" class="fixed inset-0 z-[80] hidden items-center justify-center bg-slate-900/55 backdrop-blur-sm p-3 sm:p-5 overflow-y-auto">
+    <div id="modalContent" class="game-card w-full max-w-2xl max-h-[90vh] overflow-y-auto p-5 sm:p-7 relative animate-pop my-auto">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MAIN JAVASCRIPT APPLICATION ENGINE
+       ========================================================= -->
+  <script>
+    'use strict';
+
+    /* =========================================================
+       1. CURRICULUM DATA: 12 COLOURS VOCABULARY & SVG ASSETS
+       ========================================================= */
+    const COLOURS = [
+      {
+        id: 'red',
+        name: 'RED',
+        display: 'Red',
+        indo: 'Merah',
+        hex: '#EF4444',
+        lightBg: '#FEE2E2',
+        border: '#DC2626',
+        textDark: false,
+        object: 'Apple',
+        objectIndo: 'Apel',
+        sentence: 'The apple is red.',
+        quizHint: 'A sweet crunchy fruit.'
+      },
+      {
+        id: 'blue',
+        name: 'BLUE',
+        display: 'Blue',
+        indo: 'Biru',
+        hex: '#3B82F6',
+        lightBg: '#DBEAFE',
+        border: '#2563EB',
+        textDark: false,
+        object: 'Sky',
+        objectIndo: 'Langit',
+        sentence: 'The sky is blue.',
+        quizHint: 'Look up on a sunny day!'
+      },
+      {
+        id: 'yellow',
+        name: 'YELLOW',
+        display: 'Yellow',
+        indo: 'Kuning',
+        hex: '#FACC15',
+        lightBg: '#FEF9C3',
+        border: '#CA8A04',
+        textDark: true,
+        object: 'Banana',
+        objectIndo: 'Pisang',
+        sentence: 'The banana is yellow.',
+        quizHint: 'A monkey loves this fruit!'
+      },
+      {
+        id: 'green',
+        name: 'GREEN',
+        display: 'Green',
+        indo: 'Hijau',
+        hex: '#22C55E',
+        lightBg: '#DCFCE7',
+        border: '#16A34A',
+        textDark: false,
+        object: 'Leaf',
+        objectIndo: 'Daun',
+        sentence: 'The leaf is green.',
+        quizHint: 'It grows on trees and plants.'
+      },
+      {
+        id: 'orange',
+        name: 'ORANGE',
+        display: 'Orange',
+        indo: 'Jingga',
+        hex: '#F97316',
+        lightBg: '#FFEDD5',
+        border: '#EA580C',
+        textDark: false,
+        object: 'Orange',
+        objectIndo: 'Jeruk',
+        sentence: 'The orange is orange.',
+        quizHint: 'A round juicy citrus fruit.'
+      },
+      {
+        id: 'purple',
+        name: 'PURPLE',
+        display: 'Purple',
+        indo: 'Ungu',
+        hex: '#9333EA',
+        lightBg: '#F3E8FF',
+        border: '#7E22CE',
+        textDark: false,
+        object: 'Grape',
+        objectIndo: 'Anggur',
+        sentence: 'The grape is purple.',
+        quizHint: 'Small round fruits in a bunch.'
+      },
+      {
+        id: 'pink',
+        name: 'PINK',
+        display: 'Pink',
+        indo: 'Merah muda',
+        hex: '#EC4899',
+        lightBg: '#FCE7F3',
+        border: '#DB2777',
+        textDark: false,
+        object: 'Flower',
+        objectIndo: 'Bunga',
+        sentence: 'The flower is pink.',
+        quizHint: 'A pretty blossom in the garden.'
+      },
+      {
+        id: 'black',
+        name: 'BLACK',
+        display: 'Black',
+        indo: 'Hitam',
+        hex: '#1E293B',
+        lightBg: '#E2E8F0',
+        border: '#0F172A',
+        textDark: false,
+        object: 'Hat',
+        objectIndo: 'Topi',
+        sentence: 'The hat is black.',
+        quizHint: 'You wear it on your head.'
+      },
+      {
+        id: 'white',
+        name: 'WHITE',
+        display: 'White',
+        indo: 'Putih',
+        hex: '#FFFFFF',
+        lightBg: '#F8FAFC',
+        border: '#94A3B8',
+        textDark: true,
+        object: 'Cloud',
+        objectIndo: 'Awan',
+        sentence: 'The cloud is white.',
+        quizHint: 'Soft and fluffy in the sky.'
+      },
+      {
+        id: 'brown',
+        name: 'BROWN',
+        display: 'Brown',
+        indo: 'Cokelat',
+        hex: '#92400E',
+        lightBg: '#FEF3C7',
+        border: '#78350F',
+        textDark: false,
+        object: 'Bear',
+        objectIndo: 'Beruang',
+        sentence: 'The bear is brown.',
+        quizHint: 'A cute furry forest animal.'
+      },
+      {
+        id: 'grey',
+        name: 'GREY',
+        display: 'Grey',
+        indo: 'Abu-abu',
+        hex: '#6B7280',
+        lightBg: '#F3F4F6',
+        border: '#4B5563',
+        textDark: false,
+        object: 'Elephant',
+        objectIndo: 'Gajah',
+        sentence: 'The elephant is grey.',
+        quizHint: 'A big animal with a long trunk.'
+      },
+      {
+        id: 'gold',
+        name: 'GOLD',
+        display: 'Gold',
+        indo: 'Emas',
+        hex: '#EAB308',
+        lightBg: '#FEF9C3',
+        border: '#B45309',
+        textDark: true,
+        isGold: true,
+        object: 'Crown',
+        objectIndo: 'Mahkota',
+        sentence: 'The crown is gold.',
+        quizHint: 'A shiny royal headpiece.'
+      }
+    ];
+
+    const COLOUR_MAP = Object.fromEntries(COLOURS.map(c => [c.id, c]));
+
+    /**
+     * Generates cute cartoon inline SVG illustrations for vocabulary objects
+     */
+    function getObjectSVG(colourId, sizeClass = 'w-24 h-24') {
+      const svgs = {
+        red: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Red Apple">
+          <path d="M60 32 C60 18 72 14 76 16" stroke="#78350F" stroke-width="6" stroke-linecap="round" fill="none"/>
+          <path d="M62 24 C76 14 90 18 86 30 C74 34 65 30 62 24Z" fill="#22C55E" stroke="#15803D" stroke-width="2.5"/>
+          <path d="M60 36 C42 26 20 40 22 68 C24 94 42 108 56 104 C59 103 61 103 64 104 C78 108 96 94 98 68 C100 40 78 26 60 36Z" fill="#EF4444" stroke="#B91C1C" stroke-width="3.5"/>
+          <ellipse cx="42" cy="54" rx="7" ry="13" transform="rotate(-18 42 54)" fill="#FCA5A5" opacity="0.65"/>
+          <circle cx="48" cy="70" r="3.5" fill="#1E293B"/>
+          <circle cx="72" cy="70" r="3.5" fill="#1E293B"/>
+          <path d="M53 80 Q60 87 67 80" stroke="#1E293B" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+        blue: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Blue Sky">
+          <rect x="10" y="14" width="100" height="92" rx="22" fill="#3B82F6" stroke="#1D4ED8" stroke-width="3.5"/>
+          <circle cx="84" cy="36" r="14" fill="#FDE047" stroke="#EAB308" stroke-width="2.5"/>
+          <path d="M26 78 C20 78 18 68 26 66 C26 56 40 52 46 60 C52 54 66 58 66 68 C74 68 74 78 66 78 Z" fill="#FFFFFF" opacity="0.95"/>
+          <path d="M58 92 C54 92 53 85 58 84 C59 77 69 75 74 80 C79 77 88 80 88 86 C93 86 93 92 88 92 Z" fill="#FFFFFF" opacity="0.88"/>
+        </svg>`,
+
+        yellow: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Yellow Banana">
+          <path d="M84 22 C86 58 64 90 22 92 C32 104 68 106 88 84 C104 66 102 36 92 20 Z" fill="#FACC15" stroke="#CA8A04" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M84 22 L92 16 L96 22 L92 26 Z" fill="#78350F"/>
+          <path d="M22 92 L18 96 L24 98 Z" fill="#78350F"/>
+          <path d="M84 42 C78 64 62 82 40 89" stroke="#FEF08A" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.8"/>
+          <circle cx="67" cy="70" r="3" fill="#1E293B"/>
+          <circle cx="78" cy="60" r="3" fill="#1E293B"/>
+          <path d="M71 75 Q78 76 80 69" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+        green: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Green Leaf">
+          <path d="M24 96 C24 52 50 22 98 20 C96 68 68 98 24 96 Z" fill="#22C55E" stroke="#15803D" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M18 102 C38 82 62 58 88 32" stroke="#15803D" stroke-width="4" stroke-linecap="round" fill="none"/>
+          <path d="M48 72 L46 54 M64 56 L62 40 M56 64 L74 62 M40 80 L58 78" stroke="#86EFAC" stroke-width="3" stroke-linecap="round"/>
+        </svg>`,
+
+        orange: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Orange Fruit">
+          <circle cx="60" cy="66" r="38" fill="#F97316" stroke="#C2410C" stroke-width="3.5"/>
+          <path d="M60 28 C64 16 78 14 82 24 C74 30 64 30 60 28Z" fill="#22C55E" stroke="#15803D" stroke-width="2.5"/>
+          <circle cx="42" cy="52" r="2.5" fill="#FDBA74"/>
+          <circle cx="36" cy="62" r="2" fill="#FDBA74"/>
+          <circle cx="80" cy="56" r="2.5" fill="#FDBA74"/>
+          <circle cx="48" cy="66" r="3.5" fill="#1E293B"/>
+          <circle cx="72" cy="66" r="3.5" fill="#1E293B"/>
+          <path d="M52 76 Q60 84 68 76" stroke="#1E293B" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+        purple: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Purple Grapes">
+          <path d="M60 24 L60 12 M60 18 C72 10 82 14 78 24 C70 26 63 22 60 18Z" stroke="#15803D" stroke-width="3.5" fill="#22C55E" stroke-linecap="round"/>
+          <g fill="#9333EA" stroke="#6B21A8" stroke-width="3">
+            <circle cx="44" cy="40" r="13"/>
+            <circle cx="60" cy="40" r="13"/>
+            <circle cx="76" cy="40" r="13"/>
+            <circle cx="38" cy="58" r="13"/>
+            <circle cx="54" cy="58" r="13"/>
+            <circle cx="70" cy="58" r="13"/>
+            <circle cx="84" cy="58" r="11"/>
+            <circle cx="46" cy="76" r="13"/>
+            <circle cx="64" cy="76" r="13"/>
+            <circle cx="56" cy="94" r="12"/>
+          </g>
+          <circle cx="40" cy="36" r="3" fill="#E9D5FF"/>
+          <circle cx="56" cy="54" r="3" fill="#E9D5FF"/>
+          <circle cx="60" cy="72" r="3" fill="#E9D5FF"/>
+        </svg>`,
+
+        pink: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Pink Flower">
+          <path d="M60 72 L60 110" stroke="#16A34A" stroke-width="6" stroke-linecap="round"/>
+          <path d="M60 94 C74 86 84 90 80 100 C72 104 64 98 60 94Z" fill="#22C55E" stroke="#15803D" stroke-width="2"/>
+          <g fill="#EC4899" stroke="#BE185D" stroke-width="3">
+            <circle cx="60" cy="30" r="16"/>
+            <circle cx="82" cy="46" r="16"/>
+            <circle cx="74" cy="70" r="16"/>
+            <circle cx="46" cy="70" r="16"/>
+            <circle cx="38" cy="46" r="16"/>
+          </g>
+          <circle cx="60" cy="52" r="16" fill="#FACC15" stroke="#CA8A04" stroke-width="3"/>
+          <circle cx="54" cy="50" r="2.5" fill="#1E293B"/>
+          <circle cx="66" cy="50" r="2.5" fill="#1E293B"/>
+          <path d="M55 57 Q60 62 65 57" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+        black: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Black Hat">
+          <path d="M36 74 L42 30 C44 22 76 22 78 30 L84 74 Z" fill="#1E293B" stroke="#0F172A" stroke-width="3.5"/>
+          <rect x="37" y="60" width="46" height="12" fill="#EF4444"/>
+          <ellipse cx="60" cy="78" rx="46" ry="13" fill="#334155" stroke="#0F172A" stroke-width="3.5"/>
+          <path d="M46 34 L44 56" stroke="#64748B" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+        </svg>`,
+
+        white: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="White Cloud">
+          <rect x="8" y="14" width="104" height="92" rx="22" fill="#BAE6FD" opacity="0.55"/>
+          <path d="M32 82 C20 82 16 68 26 62 C26 44 46 36 58 46 C66 34 90 38 92 56 C104 58 104 82 90 82 Z" fill="#FFFFFF" stroke="#94A3B8" stroke-width="3.5"/>
+          <circle cx="50" cy="64" r="3" fill="#334155"/>
+          <circle cx="70" cy="64" r="3" fill="#334155"/>
+          <path d="M55 72 Q60 77 65 72" stroke="#334155" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+        brown: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Brown Bear">
+          <circle cx="34" cy="36" r="14" fill="#92400E" stroke="#78350F" stroke-width="3.5"/>
+          <circle cx="34" cy="36" r="7" fill="#D97706"/>
+          <circle cx="86" cy="36" r="14" fill="#92400E" stroke="#78350F" stroke-width="3.5"/>
+          <circle cx="86" cy="36" r="7" fill="#D97706"/>
+          <circle cx="60" cy="64" r="36" fill="#92400E" stroke="#78350F" stroke-width="3.5"/>
+          <ellipse cx="60" cy="74" rx="16" ry="12" fill="#FDE68A"/>
+          <ellipse cx="60" cy="69" rx="6" ry="4.5" fill="#1E293B"/>
+          <circle cx="46" cy="58" r="4" fill="#1E293B"/>
+          <circle cx="74" cy="58" r="4" fill="#1E293B"/>
+          <path d="M54 78 Q60 83 66 78" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>`,
+
+        grey: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Grey Elephant">
+          <ellipse cx="26" cy="62" rx="18" ry="26" fill="#6B7280" stroke="#4B5563" stroke-width="3.5"/>
+          <ellipse cx="94" cy="62" rx="18" ry="26" fill="#6B7280" stroke="#4B5563" stroke-width="3.5"/>
+          <ellipse cx="26" cy="64" rx="10" ry="16" fill="#D1D5DB"/>
+          <ellipse cx="94" cy="64" rx="10" ry="16" fill="#D1D5DB"/>
+          <circle cx="60" cy="58" r="29" fill="#9CA3AF" stroke="#4B5563" stroke-width="3.5"/>
+          <path d="M52 66 C52 84 56 96 70 96 C74 96 76 90 71 88 C64 87 64 78 65 66" fill="#9CA3AF" stroke="#4B5563" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="48" cy="54" r="3.8" fill="#1E293B"/>
+          <circle cx="72" cy="54" r="3.8" fill="#1E293B"/>
+        </svg>`,
+
+        gold: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Gold Crown">
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FEF08A"/>
+              <stop offset="50%" stop-color="#EAB308"/>
+              <stop offset="100%" stop-color="#B45309"/>
+            </linearGradient>
+          </defs>
+          <path d="M18 86 L24 38 L46 60 L60 28 L74 60 L96 38 L102 86 Z" fill="url(#goldGrad)" stroke="#92400E" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="18" y="80" width="84" height="14" rx="5" fill="#CA8A04" stroke="#92400E" stroke-width="3"/>
+          <circle cx="24" cy="34" r="5" fill="#FEF08A" stroke="#92400E" stroke-width="2"/>
+          <circle cx="60" cy="24" r="6" fill="#FEF08A" stroke="#92400E" stroke-width="2"/>
+          <circle cx="96" cy="34" r="5" fill="#FEF08A" stroke="#92400E" stroke-width="2"/>
+          <circle cx="60" cy="70" r="6" fill="#EF4444" stroke="#991B1B" stroke-width="2"/>
+          <circle cx="38" cy="72" r="4.5" fill="#3B82F6"/>
+          <circle cx="82" cy="72" r="4.5" fill="#22C55E"/>
+        </svg>`,
+
+        grass: `<svg viewBox="0 0 120 120" class="${sizeClass}" aria-label="Green Grass">
+          <rect x="10" y="78" width="100" height="24" rx="12" fill="#15803D"/>
+          <path d="M20 84 Q14 48 30 34 Q28 60 36 84 Z" fill="#22C55E" stroke="#15803D" stroke-width="2.5"/>
+          <path d="M38 84 Q36 38 56 24 Q52 56 58 84 Z" fill="#4ADE80" stroke="#15803D" stroke-width="2.5"/>
+          <path d="M56 84 Q62 40 80 28 Q74 58 76 84 Z" fill="#22C55E" stroke="#15803D" stroke-width="2.5"/>
+          <path d="M74 84 Q86 46 100 38 Q92 62 94 84 Z" fill="#4ADE80" stroke="#15803D" stroke-width="2.5"/>
+        </svg>`
+      };
+      return svgs[colourId] || svgs.red;
+    }
+
+    /* =========================================================
+       2. GLOBAL STATE & PERSISTENCE (localStorage)
+       ========================================================= */
+    const STORAGE_KEY = 'my_colours_adventure_state_v1';
+
+    function createDefaultState() {
+      return {
+        playerName: '',
+        soundEnabled: true,
+        musicEnabled: false,
+        favouriteColour: 'blue',
+        score: 0,
+        correctTotal: 0,
+        wrongTotal: 0,
+        scoredItems: {}, // Prevents duplicate scoring on same question/task
+        learnedCards: [], // Colour IDs explored in Level 1
+        levelProgress: {
+          1: { completed: false, stars: 0, best: 0 },
+          2: { completed: false, stars: 0, best: 0 },
+          3: { completed: false, stars: 0, best: 0 },
+          4: { completed: false, stars: 0, best: 0 },
+          5: { completed: false, stars: 0, best: 0 },
+          6: { completed: false, stars: 0, best: 0 },
+          7: { completed: false, stars: 0, best: 0 },
+          8: { completed: false, stars: 0, best: 0 }
+        },
+        scannedColours: [], // Unique colours detected in Level 6
+        huntSuccessIds: [], // Unique colours found in Level 7
+        quizResult: {
+          taken: false,
+          correct: 0,
+          wrong: 0,
+          total: 20,
+          percentage: 0
+        }
+      };
+    }
+
+    let gameState = loadState();
+    let currentScreen = 'welcome';
+    let lastSpokenText = '';
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return createDefaultState();
+        const parsed = JSON.parse(raw);
+        const def = createDefaultState();
+        return {
+          ...def,
+          ...parsed,
+          levelProgress: { ...def.levelProgress, ...(parsed.levelProgress || {}) },
+          quizResult: { ...def.quizResult, ...(parsed.quizResult || {}) },
+          scoredItems: parsed.scoredItems || {},
+          learnedCards: parsed.learnedCards || [],
+          scannedColours: parsed.scannedColours || [],
+          huntSuccessIds: parsed.huntSuccessIds || []
+        };
+      } catch (e) {
+        return createDefaultState();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+      } catch (e) {
+        // Ignore storage quota errors in restricted frames
+      }
+      updateHud();
+    }
+
+    function getTotalStars() {
+      return Object.values(gameState.levelProgress).reduce((sum, l) => sum + (l.stars || 0), 0);
+    }
+
+    function getCompletedLevelsCount() {
+      return Object.values(gameState.levelProgress).filter(l => l.completed).length;
+    }
+
+    function getStarRank(stars) {
+      if (stars >= 16) return { label: 'Colour Master', stars: 3, badge: '👑' };
+      if (stars >= 8) return { label: 'Colour Explorer', stars: 2, badge: '🧭' };
+      return { label: 'Beginner Explorer', stars: 1, badge: '🌱' };
+    }
+
+    /**
+     * Awards points ONLY ONCE per unique itemKey to guarantee consistent scoring
+     */
+    function awardPointsOnce(itemKey, points = 10, countAsCorrect = true) {
+      if (gameState.scoredItems[itemKey]) return false;
+      gameState.scoredItems[itemKey] = points;
+      gameState.score += points;
+      if (countAsCorrect) gameState.correctTotal += 1;
+      saveState();
+      return true;
+    }
+
+    function recordWrongAttempt() {
+      gameState.wrongTotal += 1;
+      saveState();
+    }
+
+    /**
+     * Updates level progress & triggers animated star reward popup if stars increased
+     */
+    function updateLevelProgress(levelNum, ratio, completed = false) {
+      const lp = gameState.levelProgress[levelNum];
+      const prevStars = lp.stars || 0;
+      let newStars = prevStars;
+      if (ratio >= 0.9 || completed) newStars = Math.max(prevStars, 3);
+      else if (ratio >= 0.6) newStars = Math.max(prevStars, 2);
+      else if (ratio >= 0.25) newStars = Math.max(prevStars, 1);
+
+      lp.stars = newStars;
+      lp.best = Math.max(lp.best || 0, Math.round(ratio * 100));
+      if (completed) lp.completed = true;
+      saveState();
+
+      if (newStars > prevStars) {
+        const titles = {
+          1: 'Beginner Explorer! ⭐',
+          2: 'Colour Explorer! ⭐⭐',
+          3: 'Colour Master! ⭐⭐⭐'
+        };
+        showStarPopup(newStars, titles[newStars], `Level ${levelNum} star unlocked! Keep exploring!`);
+      }
+    }
+
+    function updateHud() {
+      const hud = document.getElementById('topHud');
+      if (!hud) return;
+      if (currentScreen === 'welcome') {
+        hud.classList.add('hidden');
+      } else {
+        hud.classList.remove('hidden');
+      }
+      document.getElementById('hudPlayerName').textContent = gameState.playerName.trim() || 'Explorer';
+      document.getElementById('hudScore').textContent = gameState.score;
+      document.getElementById('hudStars').textContent = getTotalStars();
+
+      const soundBtn = document.getElementById('hudSoundBtn');
+      soundBtn.textContent = gameState.soundEnabled ? '🔊' : '🔇';
+      soundBtn.className = `btn-game px-2.5 py-1.5 text-xs sm:text-sm ${
+        gameState.soundEnabled
+          ? 'bg-emerald-500 text-white border-emerald-700'
+          : 'bg-slate-400 text-white border-slate-600'
+      }`;
+
+      const musicBtn = document.getElementById('hudMusicBtn');
+      musicBtn.textContent = gameState.musicEnabled ? '🎵 ON' : '🎵 OFF';
+      musicBtn.className = `btn-game px-2.5 py-1.5 text-xs sm:text-sm ${
+        gameState.musicEnabled
+          ? 'bg-purple-500 text-white border-purple-700'
+          : 'bg-slate-400 text-white border-slate-600'
+      }`;
+    }
+
+    /* =========================================================
+       3. AUDIO ENGINE: WEB AUDIO API (SFX + BGM) & WEB SPEECH API
+       ========================================================= */
+    let audioCtx = null;
+    let bgmTimer = null;
+    let bgmStep = 0;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, duration = 0.15, type = 'sine', volume = 0.16, delay = 0) {
+      if (!gameState.soundEnabled) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      try {
+        const now = ctx.currentTime + delay;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(volume, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + duration + 0.03);
+      } catch (e) {}
+    }
+
+    function sfxClick() {
+      playTone(540, 0.07, 'triangle', 0.12);
+    }
+
+    function sfxCorrect() {
+      playTone(523.25, 0.14, 'triangle', 0.18, 0);
+      playTone(659.25, 0.14, 'triangle', 0.18, 0.09);
+      playTone(783.99, 0.24, 'triangle', 0.2, 0.18);
+    }
+
+    function sfxWrong() {
+      playTone(290, 0.16, 'sawtooth', 0.1, 0);
+      playTone(220, 0.24, 'sawtooth', 0.1, 0.13);
+    }
+
+    function sfxScan() {
+      playTone(880, 0.08, 'sine', 0.12, 0);
+      playTone(1174, 0.12, 'sine', 0.12, 0.08);
+    }
+
+    function sfxCelebration() {
+      const notes = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5];
+      const delays = [0, 0.1, 0.2, 0.3, 0.45, 0.58];
+      notes.forEach((n, i) => playTone(n, 0.22, 'triangle', 0.18, delays[i]));
+    }
+
+    // Gentle Cheerful Marimba-Style Background Music Loop
+    const BGM_MELODY = [
+      523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46,
+      523.25, 659.25, 783.99, 1046.5, 880.00, 783.99, 659.25, 587.33
+    ];
+
+    function startBgm() {
+      if (bgmTimer) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      bgmTimer = setInterval(() => {
+        if (!gameState.musicEnabled) return;
+        const note = BGM_MELODY[bgmStep % BGM_MELODY.length];
+        bgmStep++;
+        try {
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(note, now);
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.exponentialRampToValueAtTime(0.045, now + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.36);
+        } catch (e) {}
+      }, 420);
+    }
+
+    function stopBgm() {
+      if (bgmTimer) {
+        clearInterval(bgmTimer);
+        bgmTimer = null;
+      }
+    }
+
+    function toggleSound() {
+      gameState.soundEnabled = !gameState.soundEnabled;
+      if (!gameState.soundEnabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      } else {
+        sfxClick();
+      }
+      saveState();
+      if (currentScreen === 'welcome') renderWelcome();
+      showToast(gameState.soundEnabled ? '🔊 Sound & Voice ON!' : '🔇 Sound & Voice OFF', 'info');
+    }
+
+    function toggleMusic() {
+      gameState.musicEnabled = !gameState.musicEnabled;
+      if (gameState.musicEnabled) {
+        getAudioCtx();
+        startBgm();
+        showToast('🎵 Background Music ON!', 'info');
+      } else {
+        stopBgm();
+        showToast('🎵 Background Music OFF', 'info');
+      }
+      saveState();
+      if (currentScreen === 'welcome') renderWelcome();
+    }
+
+    /**
+     * Web Speech API Text-to-Speech helper with child-friendly pacing
+     */
+    function speakText(text, force = false) {
+      lastSpokenText = text;
+      if (!gameState.soundEnabled && !force) return;
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.88;
+        utter.pitch = 1.08;
+        const voices = window.speechSynthesis.getVoices();
+        const preferred = voices.find(v => /en-US|en-GB/i.test(v.lang) && /Google|Samantha|Natural|Female/i.test(v.name))
+          || voices.find(v => /^en/i.test(v.lang));
+        if (preferred) utter.voice = preferred;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {}
+    }
+
+    function replayLastAudio() {
+      if (lastSpokenText) speakText(lastSpokenText, true);
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    /* =========================================================
+       4. CONFETTI, TOASTS & MODALS (NO NATIVE ALERT/CONFIRM)
+       ========================================================= */
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function launchConfetti(count = 75) {
+      const canvas = document.getElementById('confettiCanvas');
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const colors = ['#EF4444', '#F97316', '#FACC15', '#22C55E', '#3B82F6', '#9333EA', '#EC4899'];
+
+      for (let i = 0; i < count; i++) {
+        confettiParticles.push({
+          x: Math.random() * canvas.width,
+          y: -20 - Math.random() * 140,
+          w: 7 + Math.random() * 7,
+          h: 10 + Math.random() * 8,
+          vx: (Math.random() - 0.5) * 5,
+          vy: 2.8 + Math.random() * 4.5,
+          rot: Math.random() * 360,
+          vrot: (Math.random() - 0.5) * 10,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          life: 160 + Math.random() * 60
+        });
+      }
+
+      if (!confettiAnimId) animateConfetti();
+    }
+
+    function animateConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      confettiParticles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.06;
+        p.rot += p.vrot;
+        p.life -= 1;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rot * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.life / 40));
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+
+      confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < canvas.height + 40);
+
+      if (confettiParticles.length > 0) {
+        confettiAnimId = requestAnimationFrame(animateConfetti);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        confettiAnimId = null;
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('confettiCanvas');
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const styles = {
+        success: 'bg-emerald-500 text-white border-emerald-700',
+        error: 'bg-rose-500 text-white border-rose-700',
+        warning: 'bg-amber-400 text-slate-900 border-amber-600',
+        info: 'bg-sky-500 text-white border-sky-700'
+      };
+      const el = document.createElement('div');
+      el.className = `px-5 py-3 rounded-2xl border-b-4 font-display font-bold text-center shadow-xl animate-pop pointer-events-auto ${styles[type] || styles.info}`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(10px)';
+        setTimeout(() => el.remove(), 320);
+      }, 2400);
+    }
+
+    function showStarPopup(starsCount, title, message) {
+      const popup = document.getElementById('starPopup');
+      document.getElementById('starPopupIcons').textContent = '⭐'.repeat(starsCount);
+      document.getElementById('starPopupTitle').textContent = title;
+      document.getElementById('starPopupMsg').textContent = message;
+      popup.classList.remove('hidden');
+      popup.classList.add('flex');
+      sfxCelebration();
+      launchConfetti(60);
+    }
+
+    function closeStarPopup() {
+      sfxClick();
+      const popup = document.getElementById('starPopup');
+      popup.classList.add('hidden');
+      popup.classList.remove('flex');
+    }
+
+    function openModal(html) {
+      const overlay = document.getElementById('modalOverlay');
+      const content = document.getElementById('modalContent');
+      content.innerHTML = html;
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    function closeModal() {
+      sfxClick();
+      const overlay = document.getElementById('modalOverlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+    }
+
+    document.getElementById('modalOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'modalOverlay') closeModal();
+    });
+
+    /* =========================================================
+       5. CENTRALIZED CAMERA ENGINE (REAL PIXEL RGB + HSV ANALYSIS)
+       ========================================================= */
+    const CameraEngine = {
+      stream: null,
+      facingMode: 'environment', // Prefer rear camera on mobile devices
+      videoEl: null,
+      canvasEl: document.createElement('canvas'),
+      isRunning: false,
+
+      /**
+       * Safely stops all active media tracks (Strict privacy & cleanup)
+       */
+      stop() {
+        if (this.stream) {
+          this.stream.getTracks().forEach(track => {
+            try { track.stop(); } catch (e) {}
+          });
+          this.stream = null;
+        }
+        if (this.videoEl) {
+          this.videoEl.srcObject = null;
+        }
+        this.isRunning = false;
+      },
+
+      /**
+       * Starts real device camera using MediaDevices API with full error diagnostics
+       */
+      async start(videoElement, preferredFacing = null) {
+        this.stop();
+        this.videoEl = videoElement;
+        if (preferredFacing) this.facingMode = preferredFacing;
+
+        // Check secure context (HTTPS or localhost)
+        const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        if (!window.isSecureContext && !isLocal) {
+          return {
+            ok: false,
+            code: 'INSECURE_CONTEXT',
+            title: 'HTTPS Required for Camera',
+            message: 'Akses kamera memerlukan koneksi HTTPS atau localhost. Buka aplikasi ini melalui HTTPS atau server lokal (localhost).'
+          };
+        }
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          return {
+            ok: false,
+            code: 'UNSUPPORTED',
+            title: 'Camera Not Supported',
+            message: 'Browser ini belum mendukung akses kamera (MediaDevices API). Gunakan Google Chrome, Edge, atau Safari versi terbaru.'
+          };
+        }
+
+        const constraints = {
+          audio: false,
+          video: {
+            facingMode: { ideal: this.facingMode },
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          }
+        };
+
+        try {
+          this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+          // Fallback to any available video device if facingMode constraint fails
+          if (err.name === 'OverconstrainedError') {
+            try {
+              this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            } catch (fallbackErr) {
+              return this.formatCameraError(fallbackErr);
+            }
+          } else {
+            return this.formatCameraError(err);
+          }
+        }
+
+        try {
+          videoElement.srcObject = this.stream;
+          await videoElement.play();
+          this.isRunning = true;
+          return { ok: true };
+        } catch (playErr) {
+          this.stop();
+          return this.formatCameraError(playErr);
+        }
+      },
+
+      async switchCamera(videoElement) {
+        this.facingMode = this.facingMode === 'environment' ? 'user' : 'environment';
+        return await this.start(videoElement, this.facingMode);
+      },
+
+      formatCameraError(err) {
+        const name = err?.name || 'Error';
+        if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+          return {
+            ok: false,
+            code: name,
+            title: 'Camera Permission Denied',
+            message: 'Izin kamera ditolak. Klik ikon gembok/kamera di bilah alamat browser, pilih "Allow / Izinkan", lalu coba klik START CAMERA lagi.'
+          };
+        }
+        if (name === 'NotFoundError' || name === 'DevicesNotFoundError') {
+          return {
+            ok: false,
+            code: name,
+            title: 'No Camera Found',
+            message: 'Kamera tidak ditemukan pada perangkat ini. Pastikan webcam terpasang atau gunakan perangkat berkamera.'
+          };
+        }
+        if (name === 'NotReadableError' || name === 'TrackStartError') {
+          return {
+            ok: false,
+            code: name,
+            title: 'Camera Busy',
+            message: 'Kamera sedang digunakan oleh aplikasi lain (misalnya Zoom, Meet, atau aplikasi Kamera). Tutup aplikasi tersebut lalu coba lagi.'
+          };
+        }
+        return {
+          ok: false,
+          code: name,
+          title: 'Cannot Access Camera',
+          message: `Terjadi kendala saat membuka kamera (${name}). Pastikan izin kamera aktif dan perangkat memiliki kamera.`
+        };
+      },
+
+      /**
+       * Converts RGB (0-255) to HSV (H: 0-360, S: 0-100, V: 0-100)
+       */
+      rgbToHsv(r, g, b) {
+        const rn = r / 255;
+        const gn = g / 255;
+        const bn = b / 255;
+        const max = Math.max(rn, gn, bn);
+        const min = Math.min(rn, gn, bn);
+        const d = max - min;
+
+        let h = 0;
+        if (d !== 0) {
+          if (max === rn) h = ((gn - bn) / d) % 6;
+          else if (max === gn) h = (bn - rn) / d + 2;
+          else h = (rn - gn) / d + 4;
+          h = Math.round(h * 60);
+          if (h < 0) h += 360;
+        }
+        const s = max === 0 ? 0 : (d / max) * 100;
+        const v = max * 100;
+        return { h, s, v };
+      },
+
+      /**
+       * Classifies a single RGB/HSV reading into one of the 12 curriculum colours.
+       * Tuned for real-world classroom lighting (shadows, matte paper, glossy plastic).
+       */
+      classifyPixel(r, g, b) {
+        const { h, s, v } = this.rgbToHsv(r, g, b);
+
+        // 1. Achromatic & Near-Achromatic (Black, White, Grey)
+        if (v <= 17 || (v <= 24 && s <= 28)) {
+          return 'black';
+        }
+        if (s <= 14 && v >= 72) {
+          return 'white';
+        }
+        if (s <= 17 && v > 17 && v < 72) {
+          return 'grey';
+        }
+        // Slightly tinted very dark neutrals
+        if (v <= 26 && s <= 35 && !(h >= 12 && h <= 45)) {
+          return 'black';
+        }
+
+        // 2. Warm Spectrum: Red, Pink, Orange, Brown, Gold, Yellow
+        // Pink (Light red / magenta-pink)
+        if ((h >= 305 && h <= 354) && v >= 48 && s >= 15 && s <= 75) {
+          return 'pink';
+        }
+        if ((h >= 328 || h <= 8) && v >= 68 && s >= 14 && s <= 52) {
+          return 'pink';
+        }
+
+        // Red
+        if (h <= 12 || h >= 342) {
+          // Very dark brownish-red
+          if (v < 34 && h >= 4 && h <= 14 && s >= 25) return 'brown';
+          return 'red';
+        }
+
+        // Brown (Low-to-mid brightness warm orange/amber)
+        if (h > 12 && h <= 43 && v >= 16 && v <= 53 && s >= 20) {
+          return 'brown';
+        }
+
+        // Orange
+        if (h > 12 && h <= 36 && v > 53) {
+          return 'orange';
+        }
+
+        // Gold vs Yellow (Gold is warmer amber-ochre 36-50 with medium-high value, Yellow is brighter 48-70)
+        if (h > 36 && h <= 50) {
+          if (v < 52) return 'brown';
+          if (v <= 84 && s >= 32) return 'gold';
+          return 'yellow';
+        }
+
+        // Yellow
+        if (h > 50 && h <= 72) {
+          if (v < 50 && s < 65) return 'brown';
+          if (h <= 55 && v >= 52 && v <= 74 && s >= 45) return 'gold';
+          return 'yellow';
+        }
+
+        // 3. Cool Spectrum: Green, Blue, Purple
+        if (h > 72 && h <= 168) {
+          return 'green';
+        }
+        if (h > 168 && h <= 256) {
+          return 'blue';
+        }
+        if (h > 256 && h <= 325) {
+          // Bright light magenta -> pink, deeper violet -> purple
+          if (h >= 298 && v >= 68 && s <= 62) return 'pink';
+          return 'purple';
+        }
+
+        return 'pink';
+      },
+
+      /**
+       * Samples a grid of pixels from the center scanning box of the live video feed.
+       * Uses median RGB + per-pixel voting + lighting diagnostics for high stability.
+       */
+      analyzeCenterBox(videoElement) {
+        if (!videoElement || !this.isRunning || videoElement.videoWidth === 0 || videoElement.videoHeight === 0) {
+          return { ok: false, reason: 'Camera feed is not ready yet. Please wait a moment.' };
+        }
+
+        const vw = videoElement.videoWidth;
+        const vh = videoElement.videoHeight;
+        const canvas = this.canvasEl;
+        canvas.width = vw;
+        canvas.height = vh;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(videoElement, 0, 0, vw, vh);
+
+        // Central scanning box corresponds to center 26% width x 26% height
+        const boxW = Math.max(24, Math.floor(vw * 0.26));
+        const boxH = Math.max(24, Math.floor(vh * 0.26));
+        const startX = Math.floor((vw - boxW) / 2);
+        const startY = Math.floor((vh - boxH) / 2);
+
+        const imgData = ctx.getImageData(startX, startY, boxW, boxH).data;
+
+        const rVals = [];
+        const gVals = [];
+        const bVals = [];
+        const voteCounts = {};
+        let overexposedCount = 0;
+        let pitchDarkCount = 0;
+
+        // Sample an evenly spaced 16x16 grid (256 samples)
+        const steps = 16;
+        const totalSamples = steps * steps;
+
+        for (let gy = 0; gy < steps; gy++) {
+          for (let gx = 0; gx < steps; gx++) {
+            const px = Math.floor(((gx + 0.5) / steps) * boxW);
+            const py = Math.floor(((gy + 0.5) / steps) * boxH);
+            const idx = (py * boxW + px) * 4;
+            const r = imgData[idx];
+            const g = imgData[idx + 1];
+            const b = imgData[idx + 2];
+
+            rVals.push(r);
+            gVals.push(g);
+            bVals.push(b);
+
+            if (r > 250 && g > 250 && b > 250) overexposedCount++;
+            if (r < 8 && g < 8 && b < 8) pitchDarkCount++;
+
+            const label = this.classifyPixel(r, g, b);
+            voteCounts[label] = (voteCounts[label] || 0) + 1;
+          }
+        }
+
+        // Compute Median RGB (resistant to specular glare and noise)
+        const median = (arr) => {
+          const sorted = [...arr].sort((a, b) => a - b);
+          const mid = Math.floor(sorted.length / 2);
+          return sorted.length % 2 !== 0 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+        };
+
+        const medR = median(rVals);
+        const medG = median(gVals);
+        const medB = median(bVals);
+
+        // Compute Colour Uniformity (Standard Deviation across RGB)
+        const meanR = rVals.reduce((a, b) => a + b, 0) / totalSamples;
+        const meanG = gVals.reduce((a, b) => a + b, 0) / totalSamples;
+        const meanB = bVals.reduce((a, b) => a + b, 0) / totalSamples;
+        const variance = rVals.reduce((acc, _, i) => {
+          const dr = rVals[i] - meanR;
+          const dg = gVals[i] - meanG;
+          const db = bVals[i] - meanB;
+          return acc + (dr * dr + dg * dg + db * db) / 3;
+        }, 0) / totalSamples;
+        const stdDev = Math.sqrt(variance);
+
+        // Sort colour votes
+        const sortedVotes = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]);
+        const [topColour, topVotes] = sortedVotes[0];
+        const secondColour = sortedVotes[1] ? sortedVotes[1][0] : null;
+        const secondVotes = sortedVotes[1] ? sortedVotes[1][1] : 0;
+
+        const medianClass = this.classifyPixel(medR, medG, medB);
+        const finalColour = (topVotes / totalSamples >= 0.42) ? topColour : medianClass;
+        const agreementRatio = (voteCounts[finalColour] || 0) / totalSamples;
+
+        // Lighting warning checks
+        let lightingNote = '';
+        if (pitchDarkCount / totalSamples > 0.92) {
+          return {
+            ok: false,
+            uncertain: true,
+            rgb: { r: medR, g: medG, b: medB },
+            message: 'Please try another object! (Too dark – add more light / cahaya terlalu gelap)'
+          };
+        }
+        if (overexposedCount / totalSamples > 0.92) {
+          lightingNote = 'Very bright light detected (cahaya sangat terang).';
+        } else if (stdDev > 62) {
+          lightingNote = 'Mixed colours or reflection detected (warna tidak merata / pantulan).';
+        }
+
+        // Well-defined measurable confidence score:
+        // 70% pixel agreement within scanning box + 30% colour uniformity score
+        const uniformityScore = Math.max(0, Math.min(1, 1 - (stdDev / 95)));
+        const confidence = Math.round((agreementRatio * 0.7 + uniformityScore * 0.3) * 100);
+
+        if (confidence < 42 || agreementRatio < 0.35) {
+          return {
+            ok: false,
+            uncertain: true,
+            rgb: { r: medR, g: medG, b: medB },
+            confidence,
+            message: 'Please try another object! Hold one solid-coloured object closer inside the box.'
+          };
+        }
+
+        const hsv = this.rgbToHsv(medR, medG, medB);
+        return {
+          ok: true,
+          colourId: finalColour,
+          runnerUp: secondVotes / totalSamples >= 0.22 ? secondColour : null,
+          rgb: { r: medR, g: medG, b: medB },
+          hsv,
+          confidence,
+          lightingNote
+        };
+      },
+
+      /**
+       * Checks if a scan result matches a target colour in Colour Hunt Challenge
+       * with sensible tolerance for closely adjacent lighting conditions (e.g. gold/yellow)
+       */
+      matchesTarget(result, targetId) {
+        if (!result || !result.ok) return false;
+        if (result.colourId === targetId) return true;
+        if (result.runnerUp === targetId && result.confidence >= 45) return true;
+
+        // Slight lighting tolerance for metallic Gold vs Yellow/Orange-Brown
+        if (targetId === 'gold' && (result.colourId === 'yellow' || result.colourId === 'brown') && result.hsv.h >= 34 && result.hsv.h <= 56) {
+          return true;
+        }
+        // Slight tolerance for dark Grey vs Black under shadows
+        if (targetId === 'grey' && result.colourId === 'black' && result.hsv.v >= 14 && result.hsv.s <= 22) {
+          return true;
+        }
+        return false;
+      }
+    };
+
+    /* =========================================================
+       6. ROUTER & NAVIGATION CONTROLLER
+       ========================================================= */
+    function navigateTo(screen) {
+      sfxClick();
+      // ALWAYS stop camera stream when leaving any screen for privacy & performance
+      CameraEngine.stop();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+      currentScreen = screen;
+      updateHud();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const routes = {
+        welcome: renderWelcome,
+        menu: renderMainMenu,
+        level1: renderLevel1Learn,
+        level2: renderLevel2Guess,
+        level3: renderLevel3Match,
+        level4: renderLevel4Colouring,
+        level5: renderLevel5Speak,
+        level6: renderLevel6Scanner,
+        level7: renderLevel7Hunt,
+        level8: renderLevel8Quiz,
+        results: renderFinalResults
+      };
+
+      const renderer = routes[screen] || renderMainMenu;
+      renderer();
+    }
+
+    /* =========================================================
+       7. WELCOME SCREEN & HOW TO PLAY MODAL
+       ========================================================= */
+    function renderWelcome() {
+      const root = document.getElementById('appRoot');
+      root.innerHTML = `
+        <section class="screen-enter flex flex-col items-center justify-center min-h-[88vh] py-4 relative">
+          <!-- Decorative Floating Coloured Objects -->
+          <div class="hidden md:block absolute top-6 left-4 animate-float opacity-90 pointer-events-none">${getObjectSVG('red', 'w-16 h-16')}</div>
+          <div class="hidden md:block absolute top-10 right-6 animate-float-rev opacity-90 pointer-events-none">${getObjectSVG('yellow', 'w-16 h-16')}</div>
+          <div class="hidden md:block absolute bottom-10 left-8 animate-float-rev opacity-90 pointer-events-none">${getObjectSVG('green', 'w-16 h-16')}</div>
+          <div class="hidden md:block absolute bottom-10 right-8 animate-float opacity-90 pointer-events-none">${getObjectSVG('purple', 'w-16 h-16')}</div>
+
+          <div class="game-card max-w-3xl w-full p-6 sm:p-10 text-center relative overflow-hidden border-4 border-white">
+            <!-- Animated Rainbow & Cute Kid Explorer Mascot SVG -->
+            <div class="relative mx-auto max-w-md mb-2">
+              <svg viewBox="0 0 360 175" class="w-full h-auto" aria-label="Animated Rainbow and Cute Explorer Mascot">
+                <!-- Smiling Sun -->
+                <g class="animate-pulse-gentle" style="transform-origin: 312px 42px;">
+                  <circle cx="312" cy="42" r="22" fill="#FACC15" stroke="#EAB308" stroke-width="3"/>
+                  <circle cx="305" cy="39" r="2.2" fill="#1E293B"/>
+                  <circle cx="319" cy="39" r="2.2" fill="#1E293B"/>
+                  <path d="M306 47 Q312 52 318 47" stroke="#1E293B" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+                </g>
+
+                <!-- Rainbow Arches -->
+                <path class="rainbow-arc" d="M35 155 A145 145 0 0 1 325 155" fill="none" stroke="#EF4444" stroke-width="14" stroke-linecap="round"/>
+                <path class="rainbow-arc" d="M49 155 A131 131 0 0 1 311 155" fill="none" stroke="#F97316" stroke-width="14" stroke-linecap="round"/>
+                <path class="rainbow-arc" d="M63 155 A117 117 0 0 1 297 155" fill="none" stroke="#FACC15" stroke-width="14" stroke-linecap="round"/>
+                <path class="rainbow-arc" d="M77 155 A103 103 0 0 1 283 155" fill="none" stroke="#22C55E" stroke-width="14" stroke-linecap="round"/>
+                <path class="rainbow-arc" d="M91 155 A89 89 0 0 1 269 155" fill="none" stroke="#3B82F6" stroke-width="14" stroke-linecap="round"/>
+                <path class="rainbow-arc" d="M105 155 A75 75 0 0 1 255 155" fill="none" stroke="#9333EA" stroke-width="14" stroke-linecap="round"/>
+
+                <!-- Fluffy Clouds -->
+                <g fill="#FFFFFF" stroke="#BAE6FD" stroke-width="2.5">
+                  <path d="M22 162 C12 162 12 146 24 144 C26 132 46 130 54 140 C64 134 80 140 80 152 C88 154 86 162 76 162 Z"/>
+                  <path d="M280 162 C270 162 270 146 282 144 C284 132 304 130 312 140 C322 134 338 140 338 152 C346 154 344 162 334 162 Z"/>
+                </g>
+
+                <!-- Cute Animated Kid Explorer Mascot in Center -->
+                <g class="animate-float">
+                  <!-- Body / T-shirt -->
+                  <path d="M150 156 C150 128 210 128 210 156 Z" fill="#3B82F6" stroke="#1D4ED8" stroke-width="3"/>
+                  <circle cx="180" cy="144" r="6" fill="#FACC15"/>
+                  <!-- Head -->
+                  <circle cx="180" cy="106" r="28" fill="#FDE68A" stroke="#D97706" stroke-width="2.5"/>
+                  <!-- Hair & Cap -->
+                  <path d="M152 102 C152 74 208 74 208 102 Z" fill="#EF4444" stroke="#B91C1C" stroke-width="2.5"/>
+                  <path d="M196 96 L220 98 L216 104 L196 102 Z" fill="#DC2626"/>
+                  <!-- Cute Eyes & Smile -->
+                  <circle cx="170" cy="107" r="3.5" fill="#1E293B"/>
+                  <circle cx="190" cy="107" r="3.5" fill="#1E293B"/>
+                  <circle cx="163" cy="114" r="4" fill="#FCA5A5" opacity="0.7"/>
+                  <circle cx="197" cy="114" r="4" fill="#FCA5A5" opacity="0.7"/>
+                  <path d="M172 117 Q180 125 188 117" stroke="#1E293B" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <!-- Painter Palette in Hand -->
+                  <ellipse cx="144" cy="138" rx="16" ry="11" fill="#F59E0B" stroke="#B45309" stroke-width="2.2"/>
+                  <circle cx="137" cy="136" r="3" fill="#EF4444"/>
+                  <circle cx="144" cy="132" r="3" fill="#22C55E"/>
+                  <circle cx="151" cy="136" r="3" fill="#3B82F6"/>
+                  <!-- Magnifying Glass in Other Hand -->
+                  <circle cx="218" cy="132" r="10" fill="#BAE6FD" stroke="#0284C7" stroke-width="3"/>
+                  <line x1="225" y1="139" x2="234" y2="149" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-sky-100 text-sky-700 border-2 border-sky-200 px-4 py-1 rounded-full font-display font-bold text-xs sm:text-sm mb-3">
+              <span>📚 English Grade 3 SD (Fase B)</span>
+              <span>•</span>
+              <span>Level A1</span>
+            </div>
+
+            <!-- Main Title & Subtitle -->
+            <h1 class="text-3xl sm:text-5xl font-bold rainbow-title leading-tight mb-2">
+              WELCOME TO MY COLOURS ADVENTURE!
+            </h1>
+            <p class="text-lg sm:text-2xl font-display font-semibold text-slate-600 mb-5">
+              Let's Explore the World of Colours! 🎨✨
+            </p>
+
+            <!-- Optional Student Name Input -->
+            <div class="max-w-sm mx-auto mb-6">
+              <label for="welcomeNameInput" class="block text-xs sm:text-sm font-bold text-slate-500 mb-1">
+                Student Name (Optional / Nama Siswa – Opsional)
+              </label>
+              <input
+                id="welcomeNameInput"
+                type="text"
+                maxlength="24"
+                value="${escapeHtml(gameState.playerName)}"
+                placeholder="Type your name here..."
+                oninput="updatePlayerName(this.value)"
+                class="w-full px-4 py-3 rounded-2xl border-3 border-sky-200 focus:border-sky-400 focus:outline-none text-center font-display font-bold text-lg text-slate-700 bg-sky-50/70"
+              />
+            </div>
+
+            <!-- Primary CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-5">
+              <button onclick="startAdventure()" class="btn-game bg-gradient-to-r from-emerald-400 to-green-500 text-white border-green-700 px-9 py-4 text-xl sm:text-2xl w-full sm:w-auto shadow-lg animate-pulse-gentle">
+                🚀 START GAME
+              </button>
+              <button onclick="openHowToPlayModal()" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-6 py-4 text-lg w-full sm:w-auto">
+                📖 HOW TO PLAY
+              </button>
+            </div>
+
+            <!-- Audio & Teacher Controls Row -->
+            <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2 border-t-2 border-slate-100">
+              <button onclick="playWelcomeVoice()" class="btn-game bg-pink-500 text-white border-pink-700 px-4 py-2 text-sm">
+                🗣️ HEAR WELCOME
+              </button>
+              <button onclick="toggleSound()" class="btn-game ${gameState.soundEnabled ? 'bg-sky-500 border-sky-700' : 'bg-slate-400 border-slate-600'} text-white px-4 py-2 text-sm">
+                ${gameState.soundEnabled ? '🔊 SOUND ON' : '🔇 SOUND OFF'}
+              </button>
+              <button onclick="toggleMusic()" class="btn-game ${gameState.musicEnabled ? 'bg-purple-500 border-purple-700' : 'bg-slate-400 border-slate-600'} text-white px-4 py-2 text-sm">
+                ${gameState.musicEnabled ? '🎵 MUSIC ON' : '🎵 MUSIC OFF'}
+              </button>
+              <button onclick="openTeacherModal()" class="btn-game bg-slate-700 text-white border-slate-900 px-4 py-2 text-sm">
+                👩‍🏫 TEACHER PANEL
+              </button>
+            </div>
+
+            <!-- Creator Credit Badge -->
+            <div class="mt-4 pt-3 border-t-2 border-dashed border-sky-100 text-xs sm:text-sm font-display font-bold text-slate-500">
+              ✨ Dibuat oleh: <span class="text-sky-700">A. SUSILAWATI</span> • <span class="text-purple-700">SMAN 10 PINRANG</span>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function speakColourCard(colourId) {
+      const c = COLOUR_MAP[colourId];
+      if (!c) return;
+      speakText(`${c.display}! ${c.sentence}`, true);
+    }
+
+    function selectFavouriteColour(colourId) {
+      sfxClick();
+      gameState.favouriteColour = colourId;
+      awardPointsOnce('learn_favourite_colour', 10, true);
+      saveState();
+      const c = COLOUR_MAP[colourId];
+      speakText(`My favourite colour is ${c.display.toLowerCase()}.`, true);
+      renderLevel1Learn();
+    }
+
+    function openLearnCardModal(colourId) {
+      const c = COLOUR_MAP[colourId];
+      if (!c) return;
+      sfxClick();
+      speakText(`What colour is it? It is ${c.display}! ${c.sentence}`);
+
+      // Mark as learned & update score/stars
+      if (!gameState.learnedCards.includes(colourId)) {
+        gameState.learnedCards.push(colourId);
+        awardPointsOnce(`learn_${colourId}`, 5, true);
+        const ratio = gameState.learnedCards.length / 12;
+        updateLevelProgress(1, ratio, gameState.learnedCards.length === 12);
+      }
+
+      openModal(`
+        <div class="text-center">
+          <div class="flex justify-between items-center mb-3">
+            <span class="px-3 py-1 rounded-full text-xs font-display font-bold bg-slate-100 text-slate-600">Vocabulary Card</span>
+            <button onclick="closeModal(); renderLevel1Learn();" class="btn-game bg-rose-500 text-white border-rose-700 px-3 py-1 text-sm">✖</button>
+          </div>
+
+          <div class="w-full py-5 rounded-3xl mb-4 shadow-inner border-4 ${c.isGold ? 'gold-swatch' : ''}" style="${c.isGold ? '' : `background:${c.hex};`} border-color:${c.border};">
+            <div class="text-4xl sm:text-5xl font-display font-bold tracking-wider ${c.textDark ? 'text-slate-900' : 'text-white'} drop-shadow">${c.name}</div>
+            <div class="text-lg font-bold ${c.textDark ? 'text-slate-700' : 'text-white/90'}">(${c.indo})</div>
+          </div>
+
+          <div class="flex justify-center mb-3 animate-float">${getObjectSVG(c.id, 'w-32 h-32')}</div>
+
+          <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4 mb-4 text-left space-y-1.5">
+            <div class="text-sm font-bold text-sky-600">💬 Question & Answer:</div>
+            <div class="text-lg font-display font-bold text-slate-800">"What colour is it?" → <span style="color:${c.id === 'white' ? '#334155' : c.border};">"It is ${c.name}!"</span></div>
+            <div class="text-base font-bold text-slate-700 pt-1 border-t border-sky-200">
+              Object: <span class="text-sky-700">${c.object}</span> (${c.objectIndo})<br/>
+              Sentence: <span class="text-emerald-700">"${c.sentence}"</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-2.5">
+            <button onclick="speakText('${c.display}!', true)" class="btn-game bg-sky-500 text-white border-sky-700 px-4 py-2.5 text-sm sm:text-base">
+              🔊 Hear Word
+            </button>
+            <button onclick="speakText('What colour is it? It is ${c.display}! ${c.sentence}', true)" class="btn-game bg-purple-500 text-white border-purple-700 px-4 py-2.5 text-sm sm:text-base">
+              🗣️ Hear Sentence
+            </button>
+            <button onclick="sfxCorrect(); showToast('Great pronunciation! Keep it up! 🌟', 'success'); closeModal(); renderLevel1Learn();" class="btn-game bg-emerald-500 text-white border-emerald-700 px-5 py-2.5 text-sm sm:text-base">
+              ✅ I Repeated It!
+            </button>
+          </div>
+        </div>
+      `);
+    }
+
+    /* =========================================================
+       10. LEVEL 2: GUESS THE COLOUR (12 OBJECT QUESTIONS)
+       ========================================================= */
+    const GUESS_QUESTIONS = [
+      { id: 'g1', question: 'What colour is the apple?', svgId: 'red', answer: 'red', options: ['red', 'blue', 'yellow'] },
+      { id: 'g2', question: 'What colour is the banana?', svgId: 'yellow', answer: 'yellow', options: ['green', 'yellow', 'pink'] },
+      { id: 'g3', question: 'What colour is the sky?', svgId: 'blue', answer: 'blue', options: ['blue', 'brown', 'black'] },
+      { id: 'g4', question: 'What colour is the grass?', svgId: 'grass', answer: 'green', options: ['green', 'red', 'orange'] },
+      { id: 'g5', question: 'What colour is the orange?', svgId: 'orange', answer: 'orange', options: ['orange', 'purple', 'white'] },
+      { id: 'g6', question: 'What colour is the grape?', svgId: 'purple', answer: 'purple', options: ['purple', 'yellow', 'grey'] },
+      { id: 'g7', question: 'What colour is the flower?', svgId: 'pink', answer: 'pink', options: ['black', 'pink', 'brown'] },
+      { id: 'g8', question: 'What colour is the hat?', svgId: 'black', answer: 'black', options: ['white', 'green', 'black'] },
+      { id: 'g9', question: 'What colour is the cloud?', svgId: 'white', answer: 'white', options: ['white', 'red', 'purple'] },
+      { id: 'g10', question: 'What colour is the bear?', svgId: 'brown', answer: 'brown', options: ['blue', 'brown', 'pink'] },
+      { id: 'g11', question: 'What colour is the elephant?', svgId: 'grey', answer: 'grey', options: ['grey', 'orange', 'yellow'] },
+      { id: 'g12', question: 'What colour is the crown?', svgId: 'gold', answer: 'gold', options: ['green', 'black', 'gold'] }
+    ];
+
+    let guessIndex = 0;
+    let guessSolvedInSession = new Set();
+    let guessFeedback = null;
+
+    function renderLevel2Guess() {
+      const root = document.getElementById('appRoot');
+      const total = GUESS_QUESTIONS.length;
+
+      if (guessIndex >= total) {
+        updateLevelProgress(2, 1, true);
+        root.innerHTML = `
+          <section class="screen-enter max-w-xl mx-auto text-center">
+            <div class="game-card p-8 border-4 border-amber-300">
+              <div class="text-6xl mb-3">🎉</div>
+              <h2 class="text-3xl font-bold text-amber-600 mb-2">Wonderful Job!</h2>
+              <p class="text-slate-600 font-semibold text-lg mb-6">You completed all 12 Guess the Colour questions!</p>
+              <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="restartLevel2()" class="btn-game bg-sky-500 text-white border-sky-700 px-6 py-3">🔄 Play Again</button>
+                <button onclick="navigateTo('level3')" class="btn-game bg-emerald-500 text-white border-emerald-700 px-6 py-3">Next: Matching ▶</button>
+              </div>
+            </div>
+          </section>
+        `;
+        return;
+      }
+
+      const q = GUESS_QUESTIONS[guessIndex];
+      const pct = Math.round((guessIndex / total) * 100);
+      const isSolved = guessSolvedInSession.has(q.id);
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-2xl mx-auto">
+          <div class="game-card p-5 mb-5">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <h2 class="text-xl sm:text-2xl font-bold text-orange-600">🍎 Level 2: Guess the Colour</h2>
+              <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-xl font-display font-bold text-sm">Question ${guessIndex + 1} / ${total}</span>
+            </div>
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-orange-400 to-yellow-400 transition-all duration-300" style="width:${pct}%"></div>
+            </div>
+          </div>
+
+          <div class="game-card p-6 sm:p-8 text-center">
+            <div class="flex justify-center mb-4">
+              <div class="p-5 rounded-3xl bg-sky-50 border-4 border-sky-100 inline-block ${guessFeedback?.type === 'correct' ? 'animate-bounce-success' : ''}">
+                ${getObjectSVG(q.svgId, 'w-36 h-36 sm:w-44 sm:h-44')}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center gap-2 mb-5">
+              <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">${q.question}</h3>
+              <button onclick="speakText('${q.question}', true)" class="btn-game bg-sky-100 text-sky-700 border-sky-300 px-3 py-2 text-base" title="Replay Audio">🔊</button>
+            </div>
+
+            <!-- Options -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+              ${q.options.map(optId => {
+                const c = COLOUR_MAP[optId];
+                const disabled = isSolved;
+                return `
+                  <button
+                    id="guessOpt_${optId}"
+                    onclick="submitGuessAnswer('${optId}')"
+                    ${disabled ? 'disabled' : ''}
+                    class="btn-game py-4 px-5 text-xl border-4 ${isSolved && optId === q.answer ? 'ring-4 ring-emerald-400 scale-105' : ''}"
+                    style="background:${c.lightBg}; color:#1E293B; border-color:${c.border};"
+                  >
+                    <span class="w-6 h-6 rounded-full border-2 border-slate-700/30 inline-block shrink-0 ${c.isGold ? 'gold-swatch' : ''}" style="${c.isGold ? '' : `background:${c.hex};`}"></span>
+                    <span>${c.display}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Feedback Banner -->
+            ${guessFeedback ? `
+              <div class="p-4 rounded-2xl mb-4 font-display font-bold text-lg animate-pop ${
+                guessFeedback.type === 'correct'
+                  ? 'bg-emerald-100 text-emerald-800 border-2 border-emerald-300'
+                  : 'bg-rose-100 text-rose-700 border-2 border-rose-300'
+              }">
+                ${guessFeedback.text}
+              </div>
+            ` : ''}
+
+            ${isSolved ? `
+              <button onclick="nextGuessQuestion()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-8 py-3.5 text-xl w-full sm:w-auto">
+                ${guessIndex === total - 1 ? 'FINISH LEVEL 🏆' : 'NEXT QUESTION ▶'}
+              </button>
+            ` : ''}
+          </div>
+        </section>
+      `;
+    }
+
+    function submitGuessAnswer(selectedId) {
+      const q = GUESS_QUESTIONS[guessIndex];
+      if (!q || guessSolvedInSession.has(q.id)) return;
+
+      if (selectedId === q.answer) {
+        const praises = ['Excellent!', 'Great Job!', 'Wonderful!'];
+        const praise = praises[Math.floor(Math.random() * praises.length)];
+        guessSolvedInSession.add(q.id);
+        const gained = awardPointsOnce(`guess_${q.id}`, 10, true);
+        sfxCorrect();
+        launchConfetti(35);
+        speakText(`${praise} It is ${COLOUR_MAP[q.answer].display}!`);
+        guessFeedback = {
+          type: 'correct',
+          text: `🌟 ${praise} It is ${COLOUR_MAP[q.answer].name}! ${gained ? '(+10 Points)' : '(Reviewed!)'}`
+        };
+        updateLevelProgress(2, guessSolvedInSession.size / GUESS_QUESTIONS.length, guessSolvedInSession.size === GUESS_QUESTIONS.length);
+        renderLevel2Guess();
+      } else {
+        recordWrongAttempt();
+        sfxWrong();
+        speakText('Try again!');
+        guessFeedback = { type: 'wrong', text: '💡 Try Again! Look closely at the picture.' };
+        renderLevel2Guess();
+        const wrongBtn = document.getElementById(`guessOpt_${selectedId}`);
+        if (wrongBtn) wrongBtn.classList.add('animate-shake');
+      }
+    }
+
+    function nextGuessQuestion() {
+      sfxClick();
+      guessIndex++;
+      guessFeedback = null;
+      renderLevel2Guess();
+      if (guessIndex < GUESS_QUESTIONS.length) {
+        speakText(GUESS_QUESTIONS[guessIndex].question);
+      }
+    }
+
+    function restartLevel2() {
+      sfxClick();
+      guessIndex = 0;
+      guessSolvedInSession = new Set();
+      guessFeedback = null;
+      renderLevel2Guess();
+    }
+
+    /* =========================================================
+       11. LEVEL 3: MATCHING COLOURS (DRAG & DROP – MOUSE & TOUCH)
+       ========================================================= */
+    const MATCH_ROUNDS = [
+      COLOURS.slice(0, 6),  // Part 1: Red, Blue, Yellow, Green, Orange, Purple
+      COLOURS.slice(6, 12)  // Part 2: Pink, Black, White, Brown, Grey, Gold
+    ];
+
+    let matchRoundIdx = 0;
+    let matchedPairs = new Set();
+    let selectedWordForTap = null;
+    let roundWordsOrder = [];
+    let roundCardsOrder = [];
+
+    function initMatchRound(roundIndex) {
+      matchRoundIdx = roundIndex;
+      selectedWordForTap = null;
+      const items = MATCH_ROUNDS[roundIndex];
+      roundWordsOrder = shuffleArray([...items]);
+      roundCardsOrder = shuffleArray([...items]);
+    }
+
+    function renderLevel3Match() {
+      if (roundWordsOrder.length === 0) initMatchRound(0);
+      const root = document.getElementById('appRoot');
+      const currentItems = MATCH_ROUNDS[matchRoundIdx];
+      const currentRoundMatched = currentItems.filter(c => matchedPairs.has(c.id)).length;
+      const totalMatched = matchedPairs.size;
+      const pct = Math.round((totalMatched / 12) * 100);
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-4xl mx-auto">
+          <div class="game-card p-5 mb-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-amber-600">🧩 Level 3: Matching Colours</h2>
+                <p class="text-xs sm:text-sm text-slate-600 font-semibold">
+                  Drag each English colour word onto the matching colour card! (Or tap a word, then tap the card!)
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-xl font-display font-bold text-sm">
+                  Matched: ${totalMatched} / 12
+                </span>
+                <button onclick="resetMatchingGame()" class="btn-game bg-slate-200 text-slate-700 border-slate-400 px-3 py-1.5 text-sm">
+                  🔄 Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Round Tabs -->
+            <div class="flex gap-2 mb-3">
+              <button onclick="switchMatchRound(0)" class="btn-game px-4 py-1.5 text-sm ${matchRoundIdx === 0 ? 'bg-amber-400 text-slate-900 border-amber-600' : 'bg-white text-slate-600 border-slate-300'}">
+                Set 1 (6 Colours)
+              </button>
+              <button onclick="switchMatchRound(1)" class="btn-game px-4 py-1.5 text-sm ${matchRoundIdx === 1 ? 'bg-amber-400 text-slate-900 border-amber-600' : 'bg-white text-slate-600 border-slate-300'}">
+                Set 2 (6 Colours)
+              </button>
+            </div>
+
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-yellow-400 to-emerald-500 transition-all duration-300" style="width:${pct}%"></div>
+            </div>
+          </div>
+
+          <!-- Drag & Drop Arena -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Left Column: Draggable Colour Words -->
+            <div class="game-card p-5">
+              <h3 class="font-display font-bold text-slate-700 text-lg mb-3 text-center">🏷️ Colour Names (Drag Me!)</h3>
+              <div class="grid grid-cols-2 gap-3">
+                ${roundWordsOrder.map(c => {
+                  const done = matchedPairs.has(c.id);
+                  const selected = selectedWordForTap === c.id;
+                  return `
+                    <div
+                      data-drag-word="${c.id}"
+                      onclick="tapSelectMatchWord('${c.id}')"
+                      class="drag-chip rounded-2xl p-3.5 text-center font-display font-bold text-lg border-3 shadow-sm ${
+                        done
+                          ? 'bg-emerald-100 text-emerald-700 border-emerald-400 opacity-50 pointer-events-none'
+                          : selected
+                            ? 'bg-sky-500 text-white border-sky-700 ring-4 ring-sky-300 scale-105'
+                            : 'bg-white text-slate-800 border-slate-300 hover:border-sky-400'
+                      }"
+                    >
+                      ${done ? '✓ ' : '✊ '}${c.name}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- Right Column: Drop Target Colour Cards -->
+            <div class="game-card p-5">
+              <h3 class="font-display font-bold text-slate-700 text-lg mb-3 text-center">🎨 Colour Cards (Drop Here!)</h3>
+              <div class="grid grid-cols-2 gap-3">
+                ${roundCardsOrder.map(c => {
+                  const done = matchedPairs.has(c.id);
+                  return `
+                    <div
+                      data-drop-colour="${c.id}"
+                      onclick="tapDropOnCard('${c.id}')"
+                      class="drop-zone rounded-2xl p-3 min-h-[82px] flex flex-col items-center justify-center border-4 cursor-pointer relative ${
+                        c.isGold ? 'gold-swatch' : ''
+                      } ${done ? 'ring-4 ring-emerald-400' : ''}"
+                      style="${c.isGold ? '' : `background:${c.hex};`} border-color:${c.border};"
+                    >
+                      ${done
+                        ? `<span class="px-2.5 py-1 rounded-xl bg-white/95 text-emerald-700 font-display font-bold text-sm shadow animate-pop">✓ ${c.name}</span>`
+                        : `<span class="px-2.5 py-0.5 rounded-lg bg-white/80 text-slate-700 font-bold text-xs">Drop Here</span>`
+                      }
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+
+          ${currentRoundMatched === 6 && matchRoundIdx === 0 ? `
+            <div class="mt-5 text-center animate-pop">
+              <button onclick="switchMatchRound(1)" class="btn-game bg-emerald-500 text-white border-emerald-700 px-8 py-3.5 text-xl">
+                🎉 Set 1 Complete! Go to Set 2 ▶
+              </button>
+            </div>
+          ` : ''}
+
+          ${totalMatched === 12 ? `
+            <div class="mt-5 game-card p-6 text-center border-4 border-emerald-300 animate-pop">
+              <h3 class="text-2xl font-bold text-emerald-600 mb-2">🏆 All 12 Colour Pairs Matched!</h3>
+              <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="resetMatchingGame()" class="btn-game bg-sky-500 text-white border-sky-700 px-5 py-2.5">🔄 Play Again</button>
+                <button onclick="navigateTo('level4')" class="btn-game bg-emerald-500 text-white border-emerald-700 px-6 py-2.5">Next: Colour Objects ▶</button>
+              </div>
+            </div>
+          ` : ''}
+        </section>
+      `;
+
+      attachPointerDragHandlers();
+    }
+
+    function switchMatchRound(idx) {
+      sfxClick();
+      initMatchRound(idx);
+      renderLevel3Match();
+    }
+
+    function resetMatchingGame() {
+      sfxClick();
+      matchedPairs = new Set();
+      initMatchRound(0);
+      renderLevel3Match();
+      showToast('Board reset! Try matching all 12 colours again.', 'info');
+    }
+
+    function tapSelectMatchWord(colourId) {
+      if (matchedPairs.has(colourId)) return;
+      sfxClick();
+      selectedWordForTap = selectedWordForTap === colourId ? null : colourId;
+      speakText(COLOUR_MAP[colourId].display);
+      renderLevel3Match();
+    }
+
+    function tapDropOnCard(targetColourId) {
+      if (!selectedWordForTap || matchedPairs.has(targetColourId)) return;
+      attemptMatchPair(selectedWordForTap, targetColourId);
+    }
+
+    function attemptMatchPair(wordId, targetId) {
+      if (wordId === targetId) {
+        matchedPairs.add(wordId);
+        selectedWordForTap = null;
+        const gained = awardPointsOnce(`match_${wordId}`, 10, true);
+        sfxCorrect();
+        speakText(`Great! ${COLOUR_MAP[wordId].display}!`);
+        showToast(`✅ Correct! ${COLOUR_MAP[wordId].name}! ${gained ? '+10 pts' : ''}`, 'success');
+        if (matchedPairs.size === 12) launchConfetti(70);
+        updateLevelProgress(3, matchedPairs.size / 12, matchedPairs.size === 12);
+        renderLevel3Match();
+      } else {
+        recordWrongAttempt();
+        sfxWrong();
+        speakText('Try again!');
+        showToast('❌ Oops! That colour does not match. Try again!', 'error');
+        const zone = document.querySelector(`[data-drop-colour="${targetId}"]`);
+        if (zone) {
+          zone.classList.add('animate-shake');
+          setTimeout(() => zone.classList.remove('animate-shake'), 500);
+        }
+      }
+    }
+
+    /**
+     * Unified Mouse + Touch Pointer Drag & Drop Engine
+     */
+    function attachPointerDragHandlers() {
+      const chips = document.querySelectorAll('[data-drag-word]');
+      chips.forEach(chip => {
+        chip.addEventListener('pointerdown', (e) => {
+          const wordId = chip.getAttribute('data-drag-word');
+          if (!wordId || matchedPairs.has(wordId)) return;
+
+          const startX = e.clientX;
+          const startY = e.clientY;
+          let isDragging = false;
+          let ghost = null;
+
+          const onMove = (ev) => {
+            const dx = ev.clientX - startX;
+            const dy = ev.clientY - startY;
+            if (!isDragging && Math.hypot(dx, dy) > 8) {
+              isDragging = true;
+              ghost = chip.cloneNode(true);
+              ghost.style.position = 'fixed';
+              ghost.style.zIndex = '999';
+              ghost.style.pointerEvents = 'none';
+              ghost.style.width = `${chip.offsetWidth}px`;
+              ghost.style.boxShadow = '0 16px 30px rgba(0,0,0,0.22)';
+              ghost.style.transform = 'scale(1.08) rotate(-2deg)';
+              ghost.classList.add('bg-sky-500', 'text-white', 'border-sky-700');
+              document.body.appendChild(ghost);
+              chip.style.opacity = '0.35';
+            }
+
+            if (isDragging && ghost) {
+              ghost.style.left = `${ev.clientX - ghost.offsetWidth / 2}px`;
+              ghost.style.top = `${ev.clientY - ghost.offsetHeight / 2}px`;
+
+              document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drop-active'));
+              const els = document.elementsFromPoint(ev.clientX, ev.clientY);
+              const zone = els.find(el => el.hasAttribute && el.hasAttribute('data-drop-colour'));
+              if (zone) zone.classList.add('drop-active');
+            }
+          };
+
+          const onUp = (ev) => {
+            window.removeEventListener('pointermove', onMove);
+            window.removeEventListener('pointerup', onUp);
+            window.removeEventListener('pointercancel', onUp);
+            document.querySelectorAll('.drop-zone').forEach(z => z.classList.remove('drop-active'));
+
+            if (ghost) {
+              ghost.remove();
+              ghost = null;
+            }
+            chip.style.opacity = '';
+
+            if (isDragging) {
+              const els = document.elementsFromPoint(ev.clientX, ev.clientY);
+              const zone = els.find(el => el.hasAttribute && el.hasAttribute('data-drop-colour'));
+              if (zone) {
+                const targetId = zone.getAttribute('data-drop-colour');
+                if (!matchedPairs.has(targetId)) {
+                  attemptMatchPair(wordId, targetId);
+                }
+              }
+            }
+          };
+
+          window.addEventListener('pointermove', onMove);
+          window.addEventListener('pointerup', onUp);
+          window.addEventListener('pointercancel', onUp);
+        });
+      });
+    }
+
+    /* =========================================================
+       12. LEVEL 4: COLOUR THE OBJECTS (8 INTERACTIVE SVG DRAWINGS)
+       ========================================================= */
+    const COLOURING_TASKS = [
+      {
+        id: 'balloon',
+        title: '1. Balloon',
+        instruction: 'Colour the balloon RED!',
+        targets: { main: 'red' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 240" class="w-full max-w-[280px] h-auto mx-auto">
+            <path d="M130 164 Q122 192 136 212 Q144 222 130 232" stroke="#64748B" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <polygon points="122,164 138,164 130,152" fill="${fills.knot || '#CBD5E1'}" stroke="#334155" stroke-width="3" class="colourable-part" onclick="paintRegion('knot')"/>
+            <ellipse cx="130" cy="88" rx="64" ry="74" fill="${fills.main || '#FFFFFF'}" stroke="#1E293B" stroke-width="4.5" class="colourable-part" onclick="paintRegion('main')"/>
+            <ellipse cx="105" cy="64" rx="12" ry="22" transform="rotate(-18 105 64)" fill="#FFFFFF" opacity="0.45" pointer-events="none"/>
+          </svg>`
+      },
+      {
+        id: 'house',
+        title: '2. House',
+        instruction: 'Colour the house BLUE!',
+        targets: { wall: 'blue' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 230" class="w-full max-w-[280px] h-auto mx-auto">
+            <polygon points="130,22 30,104 230,104" fill="${fills.roof || '#F1F5F9'}" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" class="colourable-part" onclick="paintRegion('roof')"/>
+            <rect x="52" y="104" width="156" height="106" rx="8" fill="${fills.wall || '#FFFFFF'}" stroke="#1E293B" stroke-width="4.5" class="colourable-part" onclick="paintRegion('wall')"/>
+            <rect x="110" y="148" width="40" height="62" rx="6" fill="${fills.door || '#E2E8F0'}" stroke="#1E293B" stroke-width="3.5" class="colourable-part" onclick="paintRegion('door')"/>
+            <rect x="68" y="124" width="28" height="28" rx="4" fill="${fills.win || '#E0F2FE'}" stroke="#1E293B" stroke-width="3" class="colourable-part" onclick="paintRegion('win')"/>
+            <rect x="164" y="124" width="28" height="28" rx="4" fill="${fills.win || '#E0F2FE'}" stroke="#1E293B" stroke-width="3" class="colourable-part" onclick="paintRegion('win')"/>
+          </svg>`
+      },
+      {
+        id: 'flower',
+        title: '3. Flower & Leaf',
+        instruction: 'Colour the flower PINK and the leaf GREEN!',
+        targets: { petals: 'pink', leaf: 'green' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 240" class="w-full max-w-[280px] h-auto mx-auto">
+            <line x1="130" y1="120" x2="130" y2="225" stroke="#15803D" stroke-width="8" stroke-linecap="round"/>
+            <path d="M130 185 C166 158 202 170 192 198 C170 208 144 198 130 185 Z" fill="${fills.leaf || '#FFFFFF'}" stroke="#1E293B" stroke-width="4" class="colourable-part" onclick="paintRegion('leaf')"/>
+            <g fill="${fills.petals || '#FFFFFF'}" stroke="#1E293B" stroke-width="4" class="colourable-part" onclick="paintRegion('petals')">
+              <circle cx="130" cy="48" r="30"/>
+              <circle cx="174" cy="80" r="30"/>
+              <circle cx="156" cy="126" r="30"/>
+              <circle cx="104" cy="126" r="30"/>
+              <circle cx="86" cy="80" r="30"/>
+            </g>
+            <circle cx="130" cy="92" r="28" fill="${fills.center || '#FEF08A'}" stroke="#1E293B" stroke-width="4" class="colourable-part" onclick="paintRegion('center')"/>
+          </svg>`
+      },
+      {
+        id: 'butterfly',
+        title: '4. Butterfly',
+        instruction: 'Colour the butterfly PURPLE!',
+        targets: { wings: 'purple' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 220" class="w-full max-w-[280px] h-auto mx-auto">
+            <g fill="${fills.wings || '#FFFFFF'}" stroke="#1E293B" stroke-width="4.5" class="colourable-part" onclick="paintRegion('wings')">
+              <ellipse cx="78" cy="84" rx="52" ry="42" transform="rotate(-18 78 84)"/>
+              <ellipse cx="182" cy="84" rx="52" ry="42" transform="rotate(18 182 84)"/>
+              <ellipse cx="88" cy="146" rx="38" ry="32" transform="rotate(16 88 146)"/>
+              <ellipse cx="172" cy="146" rx="38" ry="32" transform="rotate(-16 172 146)"/>
+            </g>
+            <ellipse cx="130" cy="118" rx="14" ry="56" fill="${fills.body || '#334155'}" stroke="#1E293B" stroke-width="4" class="colourable-part" onclick="paintRegion('body')"/>
+            <path d="M122 64 Q108 34 96 36 M138 64 Q152 34 164 36" stroke="#1E293B" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </svg>`
+      },
+      {
+        id: 'rainbow',
+        title: '5. Rainbow & Sun',
+        instruction: 'Colour the sun YELLOW!',
+        targets: { sun: 'yellow' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 220" class="w-full max-w-[280px] h-auto mx-auto">
+            <path d="M24 185 A106 106 0 0 1 236 185" fill="none" stroke="${fills.arc1 || '#E2E8F0'}" stroke-width="20" stroke-linecap="round" class="colourable-part" onclick="paintRegion('arc1')"/>
+            <path d="M46 185 A84 84 0 0 1 214 185" fill="none" stroke="${fills.arc2 || '#F1F5F9'}" stroke-width="20" stroke-linecap="round" class="colourable-part" onclick="paintRegion('arc2')"/>
+            <path d="M68 185 A62 62 0 0 1 192 185" fill="none" stroke="${fills.arc3 || '#E2E8F0'}" stroke-width="20" stroke-linecap="round" class="colourable-part" onclick="paintRegion('arc3')"/>
+            <circle cx="204" cy="54" r="34" fill="${fills.sun || '#FFFFFF'}" stroke="#1E293B" stroke-width="4.5" class="colourable-part" onclick="paintRegion('sun')"/>
+            <text x="204" y="60" text-anchor="middle" font-size="13" font-weight="bold" fill="#334155" pointer-events="none">SUN</text>
+          </svg>`
+      },
+      {
+        id: 'car',
+        title: '6. Car',
+        instruction: 'Colour the car ORANGE!',
+        targets: { body: 'orange' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 200" class="w-full max-w-[280px] h-auto mx-auto">
+            <path d="M32 134 L38 96 L76 92 L98 54 L172 54 L198 92 L228 98 L230 134 Z" fill="${fills.body || '#FFFFFF'}" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" class="colourable-part" onclick="paintRegion('body')"/>
+            <polygon points="104,64 132,64 132,92 86,92" fill="${fills.glass || '#E0F2FE'}" stroke="#1E293B" stroke-width="3" class="colourable-part" onclick="paintRegion('glass')"/>
+            <polygon points="140,64 166,64 184,92 140,92" fill="${fills.glass || '#E0F2FE'}" stroke="#1E293B" stroke-width="3" class="colourable-part" onclick="paintRegion('glass')"/>
+            <circle cx="76" cy="140" r="24" fill="${fills.wheel || '#334155'}" stroke="#1E293B" stroke-width="4" class="colourable-part" onclick="paintRegion('wheel')"/>
+            <circle cx="76" cy="140" r="10" fill="#CBD5E1" pointer-events="none"/>
+            <circle cx="186" cy="140" r="24" fill="${fills.wheel || '#334155'}" stroke="#1E293B" stroke-width="4" class="colourable-part" onclick="paintRegion('wheel')"/>
+            <circle cx="186" cy="140" r="10" fill="#CBD5E1" pointer-events="none"/>
+          </svg>`
+      },
+      {
+        id: 'fish',
+        title: '7. Fish',
+        instruction: 'Colour the fish GOLD!',
+        targets: { body: 'gold' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 200" class="w-full max-w-[280px] h-auto mx-auto">
+            <polygon points="178,100 236,56 236,144" fill="${fills.tail || '#F1F5F9'}" stroke="#1E293B" stroke-width="4.5" stroke-linejoin="round" class="colourable-part" onclick="paintRegion('tail')"/>
+            <ellipse cx="116" cy="100" rx="76" ry="52" fill="${fills.body || '#FFFFFF'}" stroke="#1E293B" stroke-width="4.5" class="colourable-part" onclick="paintRegion('body')"/>
+            <circle cx="74" cy="88" r="8" fill="#1E293B" pointer-events="none"/>
+            <circle cx="72" cy="85" r="2.5" fill="#FFFFFF" pointer-events="none"/>
+            <path d="M52 112 Q66 122 80 112" stroke="#1E293B" stroke-width="3.5" fill="none" stroke-linecap="round" pointer-events="none"/>
+          </svg>`
+      },
+      {
+        id: 'star',
+        title: '8. Star',
+        instruction: 'Colour the star YELLOW!',
+        targets: { main: 'yellow' },
+        getSvg: (fills) => `
+          <svg viewBox="0 0 260 230" class="w-full max-w-[280px] h-auto mx-auto">
+            <polygon points="130,20 160,84 230,92 178,140 192,210 130,176 68,210 82,140 30,92 100,84" fill="${fills.main || '#FFFFFF'}" stroke="#1E293B" stroke-width="5" stroke-linejoin="round" class="colourable-part" onclick="paintRegion('main')"/>
+            <circle cx="112" cy="116" r="5" fill="#1E293B" pointer-events="none"/>
+            <circle cx="148" cy="116" r="5" fill="#1E293B" pointer-events="none"/>
+            <path d="M118 134 Q130 144 142 134" stroke="#1E293B" stroke-width="4" fill="none" stroke-linecap="round" pointer-events="none"/>
+          </svg>`
+      }
+    ];
+
+    let colourTaskIdx = 0;
+    let activeBrushId = 'red';
+    let currentFills = {};
+    let currentFillIds = {};
+    let completedColourTasks = new Set();
+
+    function renderLevel4Colouring() {
+      const root = document.getElementById('appRoot');
+      const task = COLOURING_TASKS[colourTaskIdx];
+      const brush = COLOUR_MAP[activeBrushId];
+      const pct = Math.round((completedColourTasks.size / COLOURING_TASKS.length) * 100);
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-4xl mx-auto">
+          <div class="game-card p-5 mb-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h2 class="text-xl sm:text-2xl font-bold text-emerald-600">🖍️ Level 4: Colour the Objects</h2>
+              <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-xl font-display font-bold text-sm">
+                Drawing ${colourTaskIdx + 1} / ${COLOURING_TASKS.length} (${completedColourTasks.size} Checked)
+              </span>
+            </div>
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden mb-3">
+              <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-500 transition-all duration-300" style="width:${pct}%"></div>
+            </div>
+            <!-- Quick Drawing Selector Pills -->
+            <div class="flex gap-1.5 overflow-x-auto pb-1">
+              ${COLOURING_TASKS.map((t, i) => `
+                <button onclick="selectColourTask(${i})" class="px-3 py-1 rounded-xl text-xs font-display font-bold whitespace-nowrap border-2 ${
+                  i === colourTaskIdx
+                    ? 'bg-emerald-500 text-white border-emerald-700'
+                    : completedColourTasks.has(t.id)
+                      ? 'bg-emerald-100 text-emerald-700 border-emerald-300'
+                      : 'bg-white text-slate-600 border-slate-200'
+                }">
+                  ${completedColourTasks.has(t.id) ? '✓ ' : ''}${t.title}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- Drawing Canvas Area -->
+            <div class="lg:col-span-7 game-card p-5 text-center flex flex-col items-center justify-between">
+              <div class="w-full bg-amber-50 border-2 border-amber-200 rounded-2xl p-3.5 mb-4 flex items-center justify-between gap-2">
+                <div class="text-left">
+                  <div class="text-xs font-bold text-amber-700 uppercase">Instruction:</div>
+                  <div class="text-lg sm:text-2xl font-display font-bold text-slate-800">${task.instruction}</div>
+                </div>
+                <button onclick="speakText('${task.instruction}', true)" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-3.5 py-2 text-base shrink-0">🔊</button>
+              </div>
+
+              <div class="w-full py-3 bg-sky-50/60 rounded-3xl border-3 border-dashed border-sky-200 mb-4">
+                ${task.getSvg(currentFills)}
+              </div>
+
+              <p class="text-xs font-bold text-slate-500 mb-4">👆 Pick a colour from the palette, then tap a part of the picture!</p>
+
+              <div class="flex flex-wrap justify-center gap-2.5 w-full">
+                <button onclick="resetCurrentDrawing()" class="btn-game bg-slate-200 text-slate-700 border-slate-400 px-5 py-2.5 text-base">
+                  🔄 RESET
+                </button>
+                <button onclick="checkCurrentDrawing()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-7 py-2.5 text-base">
+                  ✅ CHECK
+                </button>
+                <button onclick="nextColourTask()" class="btn-game bg-sky-500 text-white border-sky-700 px-5 py-2.5 text-base">
+                  NEXT ▶
+                </button>
+              </div>
+            </div>
+
+            <!-- 12-Colour Paint Palette -->
+            <div class="lg:col-span-5 game-card p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h3 class="font-display font-bold text-lg text-slate-800">🎨 Colour Palette</h3>
+                <span class="px-3 py-1 rounded-xl text-xs font-display font-bold border-2" style="background:${brush.lightBg}; border-color:${brush.border};">
+                  Brush: ${brush.name}
+                </span>
+              </div>
+              <div class="grid grid-cols-3 gap-2.5">
+                ${COLOURS.map(c => `
+                  <button
+                    onclick="pickBrush('${c.id}')"
+                    class="rounded-2xl p-2.5 flex flex-col items-center gap-1 border-3 transition-transform cursor-pointer ${
+                      activeBrushId === c.id ? 'ring-4 ring-sky-400 scale-105 shadow-md' : 'hover:scale-105'
+                    }"
+                    style="background:${c.lightBg}; border-color:${c.border};"
+                  >
+                    <span class="w-9 h-9 rounded-full border-2 border-slate-800/20 shadow-inner ${c.isGold ? 'gold-swatch' : ''}" style="${c.isGold ? '' : `background:${c.hex};`}"></span>
+                    <span class="font-display font-bold text-xs text-slate-800">${c.display}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function pickBrush(colourId) {
+      sfxClick();
+      activeBrushId = colourId;
+      speakText(COLOUR_MAP[colourId].display);
+      renderLevel4Colouring();
+    }
+
+    function paintRegion(regionKey) {
+      sfxClick();
+      const brush = COLOUR_MAP[activeBrushId];
+      currentFills[regionKey] = brush.hex;
+      currentFillIds[regionKey] = brush.id;
+      renderLevel4Colouring();
+    }
+
+    function resetCurrentDrawing() {
+      sfxClick();
+      currentFills = {};
+      currentFillIds = {};
+      renderLevel4Colouring();
+    }
+
+    function selectColourTask(idx) {
+      sfxClick();
+      colourTaskIdx = idx;
+      currentFills = {};
+      currentFillIds = {};
+      renderLevel4Colouring();
+      speakText(COLOURING_TASKS[idx].instruction);
+    }
+
+    function checkCurrentDrawing() {
+      const task = COLOURING_TASKS[colourTaskIdx];
+      const entries = Object.entries(task.targets);
+      const allCorrect = entries.every(([region, expectedColour]) => currentFillIds[region] === expectedColour);
+
+      if (allCorrect) {
+        completedColourTasks.add(task.id);
+        const gained = awardPointsOnce(`colour_${task.id}`, 10, true);
+        sfxCorrect();
+        launchConfetti(40);
+        speakText('Wonderful! Beautiful colouring!');
+        showToast(`🎨 Excellent! You followed the instruction! ${gained ? '+10 pts' : ''}`, 'success');
+        updateLevelProgress(4, completedColourTasks.size / COLOURING_TASKS.length, completedColourTasks.size === COLOURING_TASKS.length);
+        renderLevel4Colouring();
+      } else {
+        recordWrongAttempt();
+        sfxWrong();
+        speakText('Not yet! Read the instruction and try again!');
+        showToast(`💡 Not quite! Check: "${task.instruction}"`, 'warning');
+      }
+    }
+
+    function nextColourTask() {
+      sfxClick();
+      if (colourTaskIdx < COLOURING_TASKS.length - 1) {
+        selectColourTask(colourTaskIdx + 1);
+      } else {
+        showToast('🎉 You viewed all 8 drawings! Let’s try Level 5!', 'success');
+        navigateTo('level5');
+      }
+    }
+
+    /* =========================================================
+       13. LEVEL 5: WHAT COLOUR IS IT? (SPEAKING PRACTICE)
+       ========================================================= */
+    const SPEAK_ROUNDS = COLOURS.slice(0, 8); // 8 focused speaking items
+    let speakIdx = 0;
+    let speakStep = 'answer'; // 'answer' | 'speak' | 'done'
+    let speakSolved = new Set();
+    let speechTranscript = '';
+    let speechListening = false;
+    let activeRecognition = null;
+
+    function isSpeechRecAvailable() {
+      return Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+    }
+
+    function renderLevel5Speak() {
+      const root = document.getElementById('appRoot');
+      const total = SPEAK_ROUNDS.length;
+
+      if (speakIdx >= total) {
+        updateLevelProgress(5, 1, true);
+        root.innerHTML = `
+          <section class="screen-enter max-w-xl mx-auto text-center">
+            <div class="game-card p-8 border-4 border-sky-300">
+              <div class="text-6xl mb-3">🎤🌟</div>
+              <h2 class="text-3xl font-bold text-sky-600 mb-2">Super Speaker!</h2>
+              <p class="text-slate-600 font-semibold text-lg mb-6">You practised answering "What colour is it?" and speaking in English!</p>
+              <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="restartLevel5()" class="btn-game bg-sky-500 text-white border-sky-700 px-6 py-3">🔄 Practise Again</button>
+                <button onclick="navigateTo('level6')" class="btn-game bg-purple-500 text-white border-purple-700 px-6 py-3">Next: Camera Scan 📷</button>
+              </div>
+            </div>
+          </section>
+        `;
+        return;
+      }
+
+      const target = SPEAK_ROUNDS[speakIdx];
+      const distractors = COLOURS.filter(c => c.id !== target.id).slice(0, 2);
+      // Deterministic choice order per index so re-renders don't jump
+      const opts = [target, ...distractors].sort((a, b) => a.name.localeCompare(b.name));
+      const pct = Math.round((speakSolved.size / total) * 100);
+      const speechSupported = isSpeechRecAvailable();
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-2xl mx-auto">
+          <div class="game-card p-5 mb-5">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <h2 class="text-xl sm:text-2xl font-bold text-blue-600">🎤 Level 5: What Colour Is It?</h2>
+              <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-xl font-display font-bold text-sm">Round ${speakIdx + 1} / ${total}</span>
+            </div>
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 transition-all duration-300" style="width:${pct}%"></div>
+            </div>
+          </div>
+
+          <div class="game-card p-6 sm:p-8 text-center">
+            <div class="flex justify-center mb-4">
+              <div class="p-5 rounded-3xl bg-blue-50 border-4 border-blue-100">${getObjectSVG(target.id, 'w-36 h-36')}</div>
+            </div>
+
+            <div class="flex items-center justify-center gap-2 mb-5">
+              <h3 class="text-2xl sm:text-3xl font-bold text-slate-800">"What colour is it?"</h3>
+              <button onclick="speakText('What colour is it?', true)" class="btn-game bg-sky-100 text-sky-700 border-sky-300 px-3 py-2">🔊</button>
+            </div>
+
+            ${speakStep === 'answer' ? `
+              <p class="text-sm font-bold text-slate-500 mb-3">Step 1: Choose the right answer!</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                ${opts.map(o => `
+                  <button onclick="answerSpeakStep1('${o.id}')" class="btn-game py-4 px-4 text-lg border-4" style="background:${o.lightBg}; border-color:${o.border}; color:#1E293B;">
+                    It is ${o.display.toLowerCase()}.
+                  </button>
+                `).join('')}
+              </div>
+            ` : `
+              <div class="bg-emerald-50 border-3 border-emerald-300 rounded-3xl p-5 mb-4 animate-pop">
+                <div class="text-sm font-bold text-emerald-700 mb-1">Step 2: Now Say It Out Loud! 🗣️</div>
+                <div class="text-3xl font-display font-bold text-slate-800 mb-4">"It is ${target.display.toLowerCase()}."</div>
+
+                <div class="flex flex-wrap justify-center gap-3 mb-4">
+                  <button onclick="speakText('It is ${target.display.toLowerCase()}.', true)" class="btn-game bg-sky-500 text-white border-sky-700 px-5 py-3 text-base">
+                    🔊 Listen Model
+                  </button>
+
+                  ${speechSupported ? `
+                    <button onclick="startSpeechRecognition('${target.id}')" class="btn-game ${speechListening ? 'bg-rose-500 border-rose-700 animate-pulse' : 'bg-purple-500 border-purple-700'} text-white px-6 py-3 text-base">
+                      ${speechListening ? '🎙️ Listening...' : '🎤 SPEAK'}
+                    </button>
+                  ` : ''}
+                </div>
+
+                ${speechTranscript ? `
+                  <div class="p-3 rounded-2xl bg-white border-2 border-purple-200 text-sm font-bold text-slate-700 mb-3">
+                    🎙️ Microphone heard: <span class="text-purple-700">"${escapeHtml(speechTranscript)}"</span>
+                  </div>
+                ` : ''}
+
+                ${!speechSupported ? `
+                  <div class="p-3 rounded-2xl bg-amber-50 border-2 border-amber-200 text-xs sm:text-sm text-amber-800 font-semibold mb-3">
+                    ℹ️ Browser speech recognition is not available here. Use <strong>Manual Practice Mode</strong>: click "Listen Model", repeat aloud clearly, then click the green button below!
+                  </div>
+                ` : `
+                  <p class="text-xs text-slate-500 font-semibold mb-3">
+                    Can't use microphone right now? Say it aloud and click Manual Practice Complete below.
+                  </p>
+                `}
+
+                <button onclick="completeSpeakRound('${target.id}', false)" class="btn-game bg-emerald-500 text-white border-emerald-700 px-6 py-3 text-base">
+                  ${speakStep === 'done' ? 'NEXT ROUND ▶' : '✅ I Practised Saying It! (Next ▶)'}
+                </button>
+              </div>
+            `}
+          </div>
+        </section>
+      `;
+    }
+
+    function answerSpeakStep1(chosenId) {
+      const target = SPEAK_ROUNDS[speakIdx];
+      if (chosenId === target.id) {
+        sfxCorrect();
+        speakStep = 'speak';
+        speechTranscript = '';
+        awardPointsOnce(`speak_ans_${target.id}`, 5, true);
+        speakText(`Correct! Now say: It is ${target.display.toLowerCase()}.`);
+        renderLevel5Speak();
+      } else {
+        recordWrongAttempt();
+        sfxWrong();
+        speakText('Try again!');
+        showToast('💡 Try Again! Look at the colour of the object.', 'error');
+      }
+    }
+
+    function startSpeechRecognition(targetColourId) {
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        showToast('Speech recognition is not supported in this browser.', 'warning');
+        return;
+      }
+
+      try {
+        if (activeRecognition) activeRecognition.abort();
+        const rec = new SpeechRec();
+        activeRecognition = rec;
+        rec.lang = 'en-US';
+        rec.interimResults = false;
+        rec.maxAlternatives = 3;
+
+        speechListening = true;
+        speechTranscript = '';
+        renderLevel5Speak();
+
+        rec.onresult = (event) => {
+          speechListening = false;
+          const transcripts = Array.from(event.results[0]).map(r => r.transcript.toLowerCase().trim());
+          speechTranscript = transcripts[0] || '';
+          const targetWord = COLOUR_MAP[targetColourId].display.toLowerCase();
+
+          // Check if any recognized alternative contains the spoken colour word
+          const matched = transcripts.some(t => t.includes(targetWord) || (targetWord === 'grey' && t.includes('gray')));
+          if (matched) {
+            sfxCorrect();
+            launchConfetti(35);
+            speakText(`Wonderful! You said: It is ${targetWord}!`);
+            showToast(`🌟 Awesome! We heard "${targetWord}"!`, 'success');
+            awardPointsOnce(`speak_voice_${targetColourId}`, 5, false);
+            speakSolved.add(targetColourId);
+            speakStep = 'done';
+            updateLevelProgress(5, speakSolved.size / SPEAK_ROUNDS.length, speakSolved.size === SPEAK_ROUNDS.length);
+          } else {
+            sfxWrong();
+            showToast(`🎙️ Heard "${speechTranscript}". Try saying "It is ${targetWord}" clearly!`, 'warning');
+          }
+          renderLevel5Speak();
+        };
+
+        rec.onerror = (ev) => {
+          speechListening = false;
+          showToast(`Microphone note (${ev.error}). You can try again or use Manual Practice!`, 'warning');
+          renderLevel5Speak();
+        };
+
+        rec.onend = () => {
+          if (speechListening) {
+            speechListening = false;
+            renderLevel5Speak();
+          }
+        };
+
+        rec.start();
+      } catch (e) {
+        speechListening = false;
+        showToast('Could not start microphone. Please use Manual Practice mode.', 'warning');
+        renderLevel5Speak();
+      }
+    }
+
+    function completeSpeakRound(targetId) {
+      sfxClick();
+      speakSolved.add(targetId);
+      awardPointsOnce(`speak_voice_${targetId}`, 5, false);
+      updateLevelProgress(5, speakSolved.size / SPEAK_ROUNDS.length, speakSolved.size === SPEAK_ROUNDS.length);
+      speakIdx++;
+      speakStep = 'answer';
+      speechTranscript = '';
+      renderLevel5Speak();
+    }
+
+    function restartLevel5() {
+      sfxClick();
+      speakIdx = 0;
+      speakStep = 'answer';
+      speakSolved = new Set();
+      speechTranscript = '';
+      renderLevel5Speak();
+    }
+
+    /* =========================================================
+       14. LEVEL 6: SCAN THE COLOUR – REAL-WORLD CAMERA DETECTOR
+       ========================================================= */
+    let scanResultData = null;
+    let scanErrorData = null;
+
+    function renderLevel6Scanner() {
+      const root = document.getElementById('appRoot');
+      const scannedCount = gameState.scannedColours.length;
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-4xl mx-auto">
+          <!-- Header -->
+          <div class="game-card p-5 mb-5 border-4 border-purple-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div>
+                <h2 class="text-xl sm:text-3xl font-bold text-purple-700">📷 SCAN THE COLOUR</h2>
+                <p class="text-xs sm:text-sm font-bold text-slate-600">REAL-WORLD COLOUR DETECTOR • Point your camera at any colourful object!</p>
+              </div>
+              <span class="bg-purple-100 text-purple-700 px-3 py-1.5 rounded-xl font-display font-bold text-sm">
+                Colours Discovered: ${scannedCount} / 12
+              </span>
+            </div>
+            <!-- Privacy Banner -->
+            <div class="mt-2 flex items-center gap-2 bg-emerald-50 border-2 border-emerald-200 text-emerald-800 px-3 py-2 rounded-2xl text-xs sm:text-sm font-semibold">
+              <span>🔒</span>
+              <span><strong>100% Private:</strong> All colour analysis runs locally in your browser. No photos or videos are ever uploaded.</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- Live Camera Viewport -->
+            <div class="lg:col-span-7 game-card p-4 sm:p-5 flex flex-col items-center">
+              <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-3xl overflow-hidden border-4 border-purple-300 shadow-inner mb-4 flex items-center justify-center">
+                <video id="scanVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
+
+                <!-- Inactive Camera Placeholder -->
+                <div id="scanPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-white p-5 text-center bg-gradient-to-br from-slate-800 to-purple-950">
+                  <div class="text-6xl mb-3">📷</div>
+                  <div class="font-display font-bold text-xl mb-1">Camera Ready to Start</div>
+                  <p class="text-xs sm:text-sm text-slate-300 max-w-xs">Click <strong>START CAMERA</strong> below, allow camera permission, then hold a colourful object inside the box!</p>
+                </div>
+
+                <!-- Centered Scanning Box Overlay -->
+                <div id="scanBoxOverlay" class="hidden absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
+                  <div class="relative w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-4 border-yellow-300 shadow-[0_0_0_9999px_rgba(15,23,42,0.38)]">
+                    <div class="scanner-laser"></div>
+                    <!-- Corner Markers -->
+                    <span class="absolute -top-1.5 -left-1.5 w-5 h-5 border-t-4 border-l-4 border-emerald-400 rounded-tl-lg"></span>
+                    <span class="absolute -top-1.5 -right-1.5 w-5 h-5 border-t-4 border-r-4 border-emerald-400 rounded-tr-lg"></span>
+                    <span class="absolute -bottom-1.5 -left-1.5 w-5 h-5 border-b-4 border-l-4 border-emerald-400 rounded-bl-lg"></span>
+                    <span class="absolute -bottom-1.5 -right-1.5 w-5 h-5 border-b-4 border-r-4 border-emerald-400 rounded-br-lg"></span>
+                  </div>
+                  <div class="mt-3 bg-slate-900/80 text-yellow-300 px-3.5 py-1 rounded-full font-display font-bold text-xs sm:text-sm">
+                    Put an object inside the scanning box
+                  </div>
+                </div>
+              </div>
+
+              <!-- Error Display Box -->
+              <div id="scanErrorBox" class="hidden w-full p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-800 text-sm font-semibold mb-4"></div>
+
+              <!-- Camera Control Buttons -->
+              <div class="flex flex-wrap justify-center gap-2.5 w-full">
+                <button id="btnStartScanCam" onclick="handleStartScanCamera()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-5 py-3 text-base">
+                  ▶️ START CAMERA
+                </button>
+                <button id="btnStopScanCam" onclick="handleStopScanCamera()" class="hidden btn-game bg-rose-500 text-white border-rose-700 px-4 py-3 text-base">
+                  ⏹️ STOP CAMERA
+                </button>
+                <button id="btnSwitchScanCam" onclick="handleSwitchScanCamera()" class="hidden btn-game bg-sky-500 text-white border-sky-700 px-4 py-3 text-base">
+                  🔄 SWITCH CAMERA
+                </button>
+                <button id="btnDoScan" onclick="handlePerformColourScan()" class="hidden btn-game bg-amber-400 text-slate-900 border-amber-600 px-6 py-3 text-lg w-full sm:w-auto">
+                  ✨ SCAN COLOUR
+                </button>
+              </div>
+            </div>
+
+            <!-- Detection Result Panel -->
+            <div class="lg:col-span-5 game-card p-5 flex flex-col justify-between">
+              <div id="scanResultPanel" class="text-center my-auto">
+                <div class="text-5xl mb-3">🔍🌈</div>
+                <h3 class="font-display font-bold text-xl text-slate-700 mb-2">Ready to Detect!</h3>
+                <p class="text-sm text-slate-500 font-semibold mb-4">
+                  Hold a red book, blue pencil, yellow banana, or green leaf in front of the camera and press <strong>SCAN COLOUR</strong>!
+                </p>
+                <div class="text-left bg-sky-50 border-2 border-sky-200 rounded-2xl p-3.5 text-xs text-sky-900 space-y-1">
+                  <div class="font-bold">💡 Tips for Accurate Detection:</div>
+                  <div>• Use good room lighting (avoid dark shadows).</div>
+                  <div>• Fill the center scanning box with one solid colour.</div>
+                  <div>• Avoid shiny glare or strong reflections.</div>
+                </div>
+              </div>
+
+              <!-- Discovered Colour Badges -->
+              <div class="mt-4 pt-3 border-t-2 border-slate-100">
+                <div class="text-xs font-bold text-slate-500 mb-2">Discovered Colours (${scannedCount}/12):</div>
+                <div class="flex flex-wrap gap-1.5">
+                  ${COLOURS.map(c => {
+                    const found = gameState.scannedColours.includes(c.id);
+                    return `<span class="px-2 py-0.5 rounded-lg text-[11px] font-display font-bold border ${found ? 'opacity-100' : 'opacity-30 grayscale'}" style="background:${c.lightBg}; border-color:${c.border}; color:#1E293B;">${c.display}</span>`;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    async function handleStartScanCamera() {
+      sfxClick();
+      const video = document.getElementById('scanVideo');
+      const errBox = document.getElementById('scanErrorBox');
+      errBox.classList.add('hidden');
+
+      const res = await CameraEngine.start(video, 'environment');
+      if (!res.ok) {
+        errBox.innerHTML = `<div class="font-display font-bold text-base mb-1">⚠️ ${res.title}</div><div>${res.message}</div>`;
+        errBox.classList.remove('hidden');
+        sfxWrong();
+        return;
+      }
+
+      document.getElementById('scanPlaceholder').classList.add('hidden');
+      document.getElementById('scanBoxOverlay').classList.remove('hidden');
+      document.getElementById('btnStartScanCam').classList.add('hidden');
+      document.getElementById('btnStopScanCam').classList.remove('hidden');
+      document.getElementById('btnSwitchScanCam').classList.remove('hidden');
+      document.getElementById('btnDoScan').classList.remove('hidden');
+      showToast('📷 Camera active! Put an object inside the box.', 'success');
+    }
+
+    function handleStopScanCamera() {
+      sfxClick();
+      CameraEngine.stop();
+      const ph = document.getElementById('scanPlaceholder');
+      if (ph) ph.classList.remove('hidden');
+      document.getElementById('scanBoxOverlay')?.classList.add('hidden');
+      document.getElementById('btnStartScanCam')?.classList.remove('hidden');
+      document.getElementById('btnStopScanCam')?.classList.add('hidden');
+      document.getElementById('btnSwitchScanCam')?.classList.add('hidden');
+      document.getElementById('btnDoScan')?.classList.add('hidden');
+      showToast('Camera stopped safely.', 'info');
+    }
+
+    async function handleSwitchScanCamera() {
+      sfxClick();
+      const video = document.getElementById('scanVideo');
+      const res = await CameraEngine.switchCamera(video);
+      if (!res.ok) {
+        showToast(res.message, 'warning');
+      } else {
+        showToast('🔄 Camera switched!', 'info');
+      }
+    }
+
+    function handlePerformColourScan() {
+      const video = document.getElementById('scanVideo');
+      const panel = document.getElementById('scanResultPanel');
+      sfxScan();
+
+      const result = CameraEngine.analyzeCenterBox(video);
+      if (!result.ok) {
+        sfxWrong();
+        speakText('Please try another object!');
+        panel.innerHTML = `
+          <div class="animate-pop">
+            <div class="text-5xl mb-2">🤔</div>
+            <h3 class="font-display font-bold text-2xl text-amber-600 mb-2">Please try another object!</h3>
+            <p class="text-sm text-slate-600 font-semibold mb-4">${result.message}</p>
+            ${result.rgb ? `<div class="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-100 text-xs font-bold text-slate-600 mb-4">
+              <span class="w-4 h-4 rounded-full border border-slate-400" style="background:rgb(${result.rgb.r},${result.rgb.g},${result.rgb.b})"></span>
+              Sampled RGB(${result.rgb.r}, ${result.rgb.g}, ${result.rgb.b})
+            </div>` : ''}
+            <div>
+              <button onclick="handlePerformColourScan()" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-5 py-2.5">
+                🔄 TRY AGAIN
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const col = COLOUR_MAP[result.colourId];
+      // Track discovered colour & score
+      if (!gameState.scannedColours.includes(col.id)) {
+        gameState.scannedColours.push(col.id);
+        awardPointsOnce(`scan_${col.id}`, 10, true);
+        updateLevelProgress(6, Math.min(1, gameState.scannedColours.length / 6), gameState.scannedColours.length >= 4);
+      }
+
+      sfxCorrect();
+      launchConfetti(35);
+      speakText(`Wow! It is ${col.display}! Excellent! You found ${col.display}!`);
+
+      panel.innerHTML = `
+        <div class="animate-pop">
+          <div class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 font-display font-bold text-xs mb-2">
+            ✨ DETECTED COLOUR!
+          </div>
+          <div class="text-4xl sm:text-5xl font-display font-bold mb-1" style="color:${col.id === 'white' || col.id === 'yellow' ? '#1E293B' : col.border};">
+            ${col.name}!
+          </div>
+          <div class="text-lg font-display font-bold text-slate-700 mb-3">
+            It is ${col.name}! (${col.indo})
+          </div>
+
+          <!-- Detected Pixel Swatch vs Standard Colour Swatch -->
+          <div class="flex items-center justify-center gap-4 mb-3">
+            <div class="text-center">
+              <div class="w-16 h-16 rounded-2xl border-4 border-slate-200 shadow-inner mx-auto" style="background:rgb(${result.rgb.r}, ${result.rgb.g}, ${result.rgb.b});"></div>
+              <span class="text-[11px] font-bold text-slate-500">Camera Pixel</span>
+            </div>
+            <div class="text-2xl">➡️</div>
+            <div class="text-center">
+              <div class="w-16 h-16 rounded-2xl border-4 shadow-inner mx-auto ${col.isGold ? 'gold-swatch' : ''}" style="${col.isGold ? '' : `background:${col.hex};`} border-color:${col.border};"></div>
+              <span class="text-[11px] font-bold text-slate-500">${col.display}</span>
+            </div>
+          </div>
+
+          <div class="bg-slate-100 rounded-2xl p-2.5 text-xs font-bold text-slate-600 mb-3 space-y-0.5">
+            <div>RGB: (${result.rgb.r}, ${result.rgb.g}, ${result.rgb.b}) • HSV: (${result.hsv.h}°, ${Math.round(result.hsv.s)}%, ${Math.round(result.hsv.v)}%)</div>
+            <div>Match Confidence: <span class="text-emerald-700">${result.confidence}%</span> (Pixel Consistency)</div>
+            ${result.lightingNote ? `<div class="text-amber-700">Note: ${result.lightingNote}</div>` : ''}
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-2">
+            <button onclick="speakText('Wow! It is ${col.display}! Excellent! You found ${col.display}!', true)" class="btn-game bg-sky-500 text-white border-sky-700 px-3.5 py-2 text-sm">
+              🔊 HEAR THE COLOUR
+            </button>
+            <button onclick="handlePerformColourScan()" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-3.5 py-2 text-sm">
+              📷 SCAN AGAIN
+            </button>
+            <button onclick="navigateTo('level7')" class="btn-game bg-emerald-500 text-white border-emerald-700 px-3.5 py-2 text-sm">
+              CONTINUE ▶
+            </button>
+          </div>
+        </div>
+      `;
+
+      // Update discovered counter in header without resetting video stream
+      saveState();
+    }
+
+    /* =========================================================
+       15. LEVEL 7: COLOUR HUNT CHALLENGE ("FIND THE COLOUR!")
+       ========================================================= */
+    let huntQueue = [];
+    let huntIdx = 0;
+
+    function initHuntQueue() {
+      huntQueue = shuffleArray([...COLOURS]);
+      huntIdx = 0;
+    }
+
+    function renderLevel7Hunt() {
+      if (huntQueue.length === 0) initHuntQueue();
+      const root = document.getElementById('appRoot');
+
+      if (huntIdx >= huntQueue.length) {
+        CameraEngine.stop();
+        updateLevelProgress(7, Math.min(1, gameState.huntSuccessIds.length / 12), true);
+        root.innerHTML = `
+          <section class="screen-enter max-w-xl mx-auto text-center">
+            <div class="game-card p-8 border-4 border-pink-300">
+              <div class="text-6xl mb-3">🏆📷✨</div>
+              <h2 class="text-3xl font-bold text-pink-600 mb-2">Colour Hunt Complete!</h2>
+              <p class="text-slate-600 font-semibold text-lg mb-6">
+                You found <strong>${gameState.huntSuccessIds.length} / 12</strong> real-world colours with your camera!
+              </p>
+              <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="restartLevel7()" class="btn-game bg-sky-500 text-white border-sky-700 px-6 py-3">🔄 Hunt Again</button>
+                <button onclick="navigateTo('level8')" class="btn-game bg-emerald-500 text-white border-emerald-700 px-6 py-3">Go to Final Quiz 🏆</button>
+              </div>
+            </div>
+          </section>
+        `;
+        return;
+      }
+
+      const target = huntQueue[huntIdx];
+      const pct = Math.round((huntIdx / huntQueue.length) * 100);
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-4xl mx-auto">
+          <div class="game-card p-5 mb-5 border-4 border-pink-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div>
+                <h2 class="text-xl sm:text-3xl font-bold text-pink-600">🔍 FIND THE COLOUR!</h2>
+                <p class="text-xs sm:text-sm font-bold text-slate-600">Colour Hunt Challenge • Find a real object matching the target colour!</p>
+              </div>
+              <span class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl font-display font-bold text-sm">
+                Mission ${huntIdx + 1} / 12 • Found: ${gameState.huntSuccessIds.length}
+              </span>
+            </div>
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-pink-400 to-rose-500 transition-all duration-300" style="width:${pct}%"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <!-- Target Mission Card -->
+            <div class="lg:col-span-5 game-card p-5 text-center flex flex-col justify-between">
+              <div>
+                <div class="text-xs font-bold uppercase text-pink-600 mb-1">Current Challenge:</div>
+                <h3 class="text-2xl sm:text-3xl font-display font-bold text-slate-800 mb-3">
+                  "Find something <span style="color:${target.id === 'white' || target.id === 'yellow' ? '#1E293B' : target.border};">${target.name}</span>!"
+                </h3>
+
+                <div class="w-32 h-32 rounded-3xl mx-auto mb-3 border-4 shadow-md flex flex-col items-center justify-center ${target.isGold ? 'gold-swatch' : ''}" style="${target.isGold ? '' : `background:${target.hex};`} border-color:${target.border};">
+                  <span class="font-display font-bold text-2xl ${target.textDark ? 'text-slate-900' : 'text-white'}">${target.name}</span>
+                  <span class="text-xs font-bold ${target.textDark ? 'text-slate-700' : 'text-white/90'}">(${target.indo})</span>
+                </div>
+
+                <button onclick="speakText('Find something ${target.display}!', true)" class="btn-game bg-sky-100 text-sky-700 border-sky-300 px-4 py-2 text-sm mb-4">
+                  🔊 Hear Mission
+                </button>
+
+                <!-- Feedback Area -->
+                <div id="huntFeedbackBox" class="min-h-[84px] flex items-center justify-center">
+                  <p class="text-xs sm:text-sm text-slate-500 font-semibold">Start the camera, aim at a ${target.display.toLowerCase()} object, and tap <strong>CHECK OBJECT!</strong></p>
+                </div>
+              </div>
+
+              <div class="flex justify-center gap-2 pt-3 border-t-2 border-slate-100">
+                <button onclick="skipHuntChallenge()" class="btn-game bg-slate-200 text-slate-700 border-slate-400 px-4 py-2 text-xs sm:text-sm">
+                  ⏭️ Skip Colour
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Camera Hunt Box -->
+            <div class="lg:col-span-7 game-card p-4 sm:p-5 flex flex-col items-center">
+              <div class="relative w-full aspect-[4/3] bg-slate-900 rounded-3xl overflow-hidden border-4 border-pink-300 mb-4 flex items-center justify-center">
+                <video id="huntVideo" autoplay playsinline muted class="w-full h-full object-cover"></video>
+
+                <div id="huntPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center text-white p-5 text-center bg-gradient-to-br from-slate-800 to-pink-950">
+                  <div class="text-5xl mb-2">🔍📷</div>
+                  <div class="font-display font-bold text-lg mb-1">Start Camera for Colour Hunt!</div>
+                  <p class="text-xs text-slate-300">Runs 100% locally in your browser.</p>
+                </div>
+
+                <div id="huntBoxOverlay" class="hidden absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
+                  <div class="relative w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-4 border-pink-300 shadow-[0_0_0_9999px_rgba(15,23,42,0.38)]">
+                    <div class="scanner-laser"></div>
+                  </div>
+                  <div class="mt-3 bg-slate-900/80 text-pink-200 px-3 py-1 rounded-full font-display font-bold text-xs">
+                    Aim at something ${target.name}!
+                  </div>
+                </div>
+              </div>
+
+              <div id="huntErrorBox" class="hidden w-full p-3.5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-800 text-xs sm:text-sm font-semibold mb-3"></div>
+
+              <div class="flex flex-wrap justify-center gap-2.5 w-full">
+                <button id="btnStartHuntCam" onclick="handleStartHuntCamera()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-5 py-3 text-base">
+                  ▶️ START CAMERA
+                </button>
+                <button id="btnStopHuntCam" onclick="handleStopHuntCamera()" class="hidden btn-game bg-rose-500 text-white border-rose-700 px-4 py-3 text-base">
+                  ⏹️ STOP
+                </button>
+                <button id="btnSwitchHuntCam" onclick="handleSwitchHuntCamera()" class="hidden btn-game bg-sky-500 text-white border-sky-700 px-4 py-3 text-base">
+                  🔄 SWITCH
+                </button>
+                <button id="btnCheckHunt" onclick="handleCheckHuntObject()" class="hidden btn-game bg-pink-500 text-white border-pink-700 px-6 py-3 text-lg w-full sm:w-auto">
+                  🎯 CHECK OBJECT!
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      // If camera was already running from previous hunt challenge, seamlessly reattach!
+      if (CameraEngine.isRunning && CameraEngine.stream) {
+        const video = document.getElementById('huntVideo');
+        if (video) {
+          video.srcObject = CameraEngine.stream;
+          video.play().catch(() => {});
+          CameraEngine.videoEl = video;
+          showHuntCameraActiveUI();
+        }
+      }
+    }
+
+    function showHuntCameraActiveUI() {
+      document.getElementById('huntPlaceholder')?.classList.add('hidden');
+      document.getElementById('huntBoxOverlay')?.classList.remove('hidden');
+      document.getElementById('btnStartHuntCam')?.classList.add('hidden');
+      document.getElementById('btnStopHuntCam')?.classList.remove('hidden');
+      document.getElementById('btnSwitchHuntCam')?.classList.remove('hidden');
+      document.getElementById('btnCheckHunt')?.classList.remove('hidden');
+    }
+
+    async function handleStartHuntCamera() {
+      sfxClick();
+      const video = document.getElementById('huntVideo');
+      const errBox = document.getElementById('huntErrorBox');
+      errBox.classList.add('hidden');
+
+      const res = await CameraEngine.start(video, 'environment');
+      if (!res.ok) {
+        errBox.innerHTML = `<strong>⚠️ ${res.title}:</strong> ${res.message}`;
+        errBox.classList.remove('hidden');
+        sfxWrong();
+        return;
+      }
+      showHuntCameraActiveUI();
+      speakText(`Find something ${huntQueue[huntIdx].display}!`);
+    }
+
+    function handleStopHuntCamera() {
+      sfxClick();
+      CameraEngine.stop();
+      document.getElementById('huntPlaceholder')?.classList.remove('hidden');
+      document.getElementById('huntBoxOverlay')?.classList.add('hidden');
+      document.getElementById('btnStartHuntCam')?.classList.remove('hidden');
+      document.getElementById('btnStopHuntCam')?.classList.add('hidden');
+      document.getElementById('btnSwitchHuntCam')?.classList.add('hidden');
+      document.getElementById('btnCheckHunt')?.classList.add('hidden');
+    }
+
+    async function handleSwitchHuntCamera() {
+      sfxClick();
+      const video = document.getElementById('huntVideo');
+      const res = await CameraEngine.switchCamera(video);
+      if (!res.ok) showToast(res.message, 'warning');
+    }
+
+    function handleCheckHuntObject() {
+      const video = document.getElementById('huntVideo');
+      const target = huntQueue[huntIdx];
+      const fb = document.getElementById('huntFeedbackBox');
+      sfxScan();
+
+      const result = CameraEngine.analyzeCenterBox(video);
+      if (!result.ok) {
+        sfxWrong();
+        speakText('Not yet! Try again!');
+        fb.innerHTML = `<div class="p-3 rounded-2xl bg-amber-100 text-amber-800 font-display font-bold text-sm animate-pop">🤔 NOT YET! TRY AGAIN! <div class="text-xs font-sans font-semibold mt-1">${result.message}</div></div>`;
+        return;
+      }
+
+      if (CameraEngine.matchesTarget(result, target.id)) {
+        if (!gameState.huntSuccessIds.includes(target.id)) {
+          gameState.huntSuccessIds.push(target.id);
+        }
+        const gained = awardPointsOnce(`hunt_${target.id}`, 10, true);
+        sfxCelebration();
+        launchConfetti(60);
+        speakText(`Amazing! You found ${target.display}!`);
+        updateLevelProgress(7, Math.min(1, gameState.huntSuccessIds.length / 8), gameState.huntSuccessIds.length >= 6);
+
+        fb.innerHTML = `
+          <div class="p-3.5 rounded-2xl bg-emerald-100 border-2 border-emerald-400 text-emerald-800 font-display font-bold animate-pop w-full">
+            <div class="text-xl">🌟 AMAZING! ⭐</div>
+            <div class="text-sm mb-2">You found ${target.name}! ${gained ? '+10 Points!' : ''}</div>
+            <button onclick="nextHuntChallenge()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-5 py-2 text-sm">
+              NEXT CHALLENGE ▶
+            </button>
+          </div>
+        `;
+      } else {
+        const seen = COLOUR_MAP[result.colourId];
+        recordWrongAttempt();
+        sfxWrong();
+        speakText('Not yet! Try again!');
+        fb.innerHTML = `
+          <div class="p-3 rounded-2xl bg-rose-100 border-2 border-rose-300 text-rose-800 font-display font-bold animate-shake w-full">
+            <div>❌ NOT YET! TRY AGAIN!</div>
+            <div class="text-xs font-sans font-semibold mt-1">Camera saw <strong>${seen.name}</strong>. Try finding something <strong>${target.name}</strong>!</div>
+          </div>
+        `;
+      }
+    }
+
+    function nextHuntChallenge() {
+      sfxClick();
+      huntIdx++;
+      renderLevel7Hunt();
+      if (huntIdx < huntQueue.length) {
+        speakText(`Find something ${huntQueue[huntIdx].display}!`);
+      }
+    }
+
+    function skipHuntChallenge() {
+      sfxClick();
+      huntIdx++;
+      renderLevel7Hunt();
+    }
+
+    function restartLevel7() {
+      sfxClick();
+      initHuntQueue();
+      renderLevel7Hunt();
+    }
+
+    /* =========================================================
+       16. LEVEL 8: FINAL QUIZ (20 RANDOMIZED VARIED QUESTIONS)
+       ========================================================= */
+    const QUIZ_BANK = [
+      // Type 1: Multiple Choice
+      { id: 'q1', type: 'Multiple Choice', prompt: 'What colour is the banana?', visual: { kind: 'svg', id: 'yellow' }, answer: 'Yellow', options: ['Red', 'Yellow', 'Blue', 'Green'] },
+      { id: 'q2', type: 'Multiple Choice', prompt: 'What colour is an apple?', visual: { kind: 'svg', id: 'red' }, answer: 'Red', options: ['Red', 'Grey', 'Black', 'Purple'] },
+      { id: 'q3', type: 'Multiple Choice', prompt: 'What colour is a leaf?', visual: { kind: 'svg', id: 'green' }, answer: 'Green', options: ['Green', 'Purple', 'Orange', 'Grey'] },
+      { id: 'q4', type: 'Multiple Choice', prompt: 'What colour is the elephant?', visual: { kind: 'svg', id: 'grey' }, answer: 'Grey', options: ['Grey', 'Pink', 'Yellow', 'Orange'] },
+
+      // Type 2: Identify the Colour (Swatch)
+      { id: 'q5', type: 'Identify the Colour', prompt: 'Identify this colour!', visual: { kind: 'swatch', id: 'purple' }, answer: 'Purple', options: ['Purple', 'Brown', 'Blue', 'Red'] },
+      { id: 'q6', type: 'Identify the Colour', prompt: 'Identify this colour!', visual: { kind: 'swatch', id: 'orange' }, answer: 'Orange', options: ['Orange', 'Green', 'White', 'Black'] },
+      { id: 'q7', type: 'Identify the Colour', prompt: 'Identify this colour!', visual: { kind: 'swatch', id: 'pink' }, answer: 'Pink', options: ['Pink', 'Grey', 'Gold', 'Brown'] },
+      { id: 'q8', type: 'Identify the Colour', prompt: 'Identify this colour!', visual: { kind: 'swatch', id: 'gold' }, answer: 'Gold', options: ['Gold', 'Blue', 'Black', 'Green'] },
+
+      // Type 3: Match the Colour (Indonesian -> English)
+      { id: 'q9', type: 'Match the Colour', prompt: 'Match "Cokelat" to the English colour:', visual: { kind: 'badge', text: 'Cokelat 🇮🇩' }, answer: 'Brown', options: ['Brown', 'Black', 'Blue', 'White'] },
+      { id: 'q10', type: 'Match the Colour', prompt: 'Match "Merah muda" to the English colour:', visual: { kind: 'badge', text: 'Merah muda 🇮🇩' }, answer: 'Pink', options: ['Pink', 'Red', 'Purple', 'Orange'] },
+      { id: 'q11', type: 'Match the Colour', prompt: 'Match "Abu-abu" to the English colour:', visual: { kind: 'badge', text: 'Abu-abu 🇮🇩' }, answer: 'Grey', options: ['Grey', 'Gold', 'Green', 'White'] },
+
+      // Type 4: Complete the Sentence
+      { id: 'q12', type: 'Complete the Sentence', prompt: 'The sky is ______.', visual: { kind: 'svg', id: 'blue' }, answer: 'Blue', options: ['Blue', 'Pink', 'Brown', 'Black'] },
+      { id: 'q13', type: 'Complete the Sentence', prompt: 'The cloud is ______.', visual: { kind: 'svg', id: 'white' }, answer: 'White', options: ['White', 'Orange', 'Purple', 'Green'] },
+      { id: 'q14', type: 'Complete the Sentence', prompt: 'The bear is ______.', visual: { kind: 'svg', id: 'brown' }, answer: 'Brown', options: ['Brown', 'Yellow', 'Pink', 'Blue'] },
+      { id: 'q15', type: 'Complete the Sentence', prompt: 'The crown is ______.', visual: { kind: 'svg', id: 'gold' }, answer: 'Gold', options: ['Gold', 'Grey', 'Black', 'Green'] },
+
+      // Type 5: What Colour Is It? (Full Sentence Response)
+      { id: 'q16', type: 'What Colour Is It?', prompt: 'What colour is it?', visual: { kind: 'svg', id: 'purple' }, answer: 'It is purple.', options: ['It is purple.', 'It is yellow.', 'It is white.', 'It is brown.'] },
+      { id: 'q17', type: 'What Colour Is It?', prompt: 'What colour is it?', visual: { kind: 'svg', id: 'black' }, answer: 'It is black.', options: ['It is black.', 'It is pink.', 'It is green.', 'It is orange.'] },
+      { id: 'q18', type: 'What Colour Is It?', prompt: 'What colour is it?', visual: { kind: 'svg', id: 'orange' }, answer: 'It is orange.', options: ['It is orange.', 'It is blue.', 'It is grey.', 'It is white.'] },
+
+      // Type 6: Choose the Correct Object Colour
+      { id: 'q19', type: 'Choose the Correct Object', prompt: 'Which object is usually GREEN?', visual: { kind: 'swatch', id: 'green' }, answer: 'Leaf', options: ['Leaf', 'Sky', 'Banana', 'Cloud'] },
+      { id: 'q20', type: 'Choose the Correct Object', prompt: 'Which object is usually RED?', visual: { kind: 'swatch', id: 'red' }, answer: 'Apple', options: ['Apple', 'Elephant', 'Cloud', 'Banana'] }
+    ];
+
+    let activeQuiz = [];
+    let quizIdx = 0;
+    let quizCorrect = 0;
+    let quizWrong = 0;
+    let quizAnsweredCurrent = false;
+    let quizSelectedOpt = null;
+
+    function startNewQuizSession() {
+      activeQuiz = shuffleArray(QUIZ_BANK).map(q => ({
+        ...q,
+        shuffledOptions: shuffleArray([...q.options])
+      }));
+      quizIdx = 0;
+      quizCorrect = 0;
+      quizWrong = 0;
+      quizAnsweredCurrent = false;
+      quizSelectedOpt = null;
+    }
+
+    function renderLevel8Quiz() {
+      if (activeQuiz.length === 0) startNewQuizSession();
+      const root = document.getElementById('appRoot');
+      const total = activeQuiz.length;
+
+      if (quizIdx >= total) {
+        const pct = Math.round((quizCorrect / total) * 100);
+        gameState.quizResult = {
+          taken: true,
+          correct: quizCorrect,
+          wrong: quizWrong,
+          total,
+          percentage: pct
+        };
+        updateLevelProgress(8, pct / 100, true);
+        saveState();
+        sfxCelebration();
+        launchConfetti(90);
+        navigateTo('results');
+        return;
+      }
+
+      const q = activeQuiz[quizIdx];
+      const progressPct = Math.round((quizIdx / total) * 100);
+
+      let visualHtml = '';
+      if (q.visual.kind === 'svg') {
+        visualHtml = `<div class="p-4 rounded-3xl bg-sky-50 border-3 border-sky-100 inline-block">${getObjectSVG(q.visual.id, 'w-32 h-32')}</div>`;
+      } else if (q.visual.kind === 'swatch') {
+        const c = COLOUR_MAP[q.visual.id];
+        visualHtml = `<div class="w-40 h-24 rounded-3xl border-4 shadow-md mx-auto ${c.isGold ? 'gold-swatch' : ''}" style="${c.isGold ? '' : `background:${c.hex};`} border-color:${c.border};"></div>`;
+      } else if (q.visual.kind === 'badge') {
+        visualHtml = `<div class="inline-block px-6 py-4 rounded-3xl bg-amber-100 border-4 border-amber-300 font-display font-bold text-2xl text-amber-900">${q.visual.text}</div>`;
+      }
+
+      const letters = ['A', 'B', 'C', 'D'];
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-2xl mx-auto">
+          <div class="game-card p-5 mb-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h2 class="text-xl sm:text-2xl font-bold text-teal-600">🏆 Level 8: Final Quiz</h2>
+              <div class="flex items-center gap-2 text-sm font-display font-bold">
+                <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-xl">Q ${quizIdx + 1} / ${total}</span>
+                <span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-xl">✓ ${quizCorrect}</span>
+              </div>
+            </div>
+            <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-teal-400 to-cyan-500 transition-all duration-300" style="width:${progressPct}%"></div>
+            </div>
+          </div>
+
+          <div class="game-card p-6 sm:p-8 text-center">
+            <span class="inline-block px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-display font-bold text-xs mb-3">
+              ${q.type}
+            </span>
+
+            <div class="mb-4">${visualHtml}</div>
+
+            <div class="flex items-center justify-center gap-2 mb-6">
+              <h3 class="text-xl sm:text-2xl font-bold text-slate-800">${q.prompt}</h3>
+              <button onclick="speakText('${q.prompt.replace(/______/g, 'blank')}', true)" class="btn-game bg-sky-100 text-sky-700 border-sky-300 px-3 py-1.5 text-sm">🔊</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+              ${q.shuffledOptions.map((opt, idx) => {
+                let btnStyle = 'bg-white text-slate-800 border-slate-300 hover:border-teal-400';
+                if (quizAnsweredCurrent) {
+                  if (opt === q.answer) btnStyle = 'bg-emerald-500 text-white border-emerald-700 ring-4 ring-emerald-200';
+                  else if (opt === quizSelectedOpt) btnStyle = 'bg-rose-500 text-white border-rose-700';
+                  else btnStyle = 'bg-slate-100 text-slate-400 border-slate-200';
+                }
+                return `
+                  <button
+                    onclick="submitQuizOption(${idx})"
+                    ${quizAnsweredCurrent ? 'disabled' : ''}
+                    class="btn-game py-3.5 px-4 text-left justify-start text-base sm:text-lg border-3 ${btnStyle}"
+                  >
+                    <span class="w-8 h-8 rounded-xl bg-slate-900/10 flex items-center justify-center font-bold text-sm shrink-0">${letters[idx]}</span>
+                    <span>${opt}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            ${quizAnsweredCurrent ? `
+              <div class="animate-pop">
+                <div class="p-3.5 rounded-2xl mb-4 font-display font-bold ${
+                  quizSelectedOpt === q.answer
+                    ? 'bg-emerald-100 text-emerald-800 border-2 border-emerald-300'
+                    : 'bg-rose-100 text-rose-800 border-2 border-rose-300'
+                }">
+                  ${quizSelectedOpt === q.answer
+                    ? '🌟 Excellent! Correct Answer!'
+                    : `💡 Good try! The correct answer is: "${q.answer}"`}
+                </div>
+                <button onclick="nextQuizQuestion()" class="btn-game bg-teal-500 text-white border-teal-700 px-8 py-3.5 text-lg w-full sm:w-auto">
+                  ${quizIdx === total - 1 ? 'SEE MY RESULTS 🏆' : 'NEXT QUESTION ▶'}
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        </section>
+      `;
+    }
+
+    function submitQuizOption(optIdx) {
+      if (quizAnsweredCurrent) return;
+      const q = activeQuiz[quizIdx];
+      const chosen = q.shuffledOptions[optIdx];
+      quizSelectedOpt = chosen;
+      quizAnsweredCurrent = true;
+
+      if (chosen === q.answer) {
+        quizCorrect++;
+        awardPointsOnce(`quiz_${q.id}`, 10, true);
+        sfxCorrect();
+        speakText('Excellent!');
+      } else {
+        quizWrong++;
+        recordWrongAttempt();
+        sfxWrong();
+        speakText(`The answer is ${q.answer}`);
+      }
+      renderLevel8Quiz();
+    }
+
+    function nextQuizQuestion() {
+      sfxClick();
+      quizIdx++;
+      quizAnsweredCurrent = false;
+      quizSelectedOpt = null;
+      renderLevel8Quiz();
+    }
+
+    /* =========================================================
+       17. FINAL RESULTS SCREEN
+       ========================================================= */
+    function getEvaluationCategory(pct) {
+      if (pct >= 90) return { label: 'EXCELLENT!', color: 'text-emerald-600', bg: 'bg-emerald-100 border-emerald-300' };
+      if (pct >= 80) return { label: 'VERY GOOD!', color: 'text-sky-600', bg: 'bg-sky-100 border-sky-300' };
+      if (pct >= 70) return { label: 'GOOD JOB!', color: 'text-amber-600', bg: 'bg-amber-100 border-amber-300' };
+      return { label: 'KEEP PRACTICING!', color: 'text-rose-600', bg: 'bg-rose-100 border-rose-300' };
+    }
+
+    function renderFinalResults() {
+      const root = document.getElementById('appRoot');
+      const totalStars = getTotalStars();
+      const levelsDone = getCompletedLevelsCount();
+      const huntDone = gameState.huntSuccessIds.length;
+      const pct = gameState.quizResult.taken
+        ? gameState.quizResult.percentage
+        : (gameState.correctTotal + gameState.wrongTotal > 0
+            ? Math.round((gameState.correctTotal / (gameState.correctTotal + gameState.wrongTotal)) * 100)
+            : 0);
+      const cat = getEvaluationCategory(pct);
+
+      root.innerHTML = `
+        <section class="screen-enter max-w-3xl mx-auto text-center">
+          <div class="game-card p-6 sm:p-10 border-4 border-yellow-300 relative overflow-hidden">
+            <div class="text-6xl mb-2 animate-bounce-success">🏆🌈⭐</div>
+            <h1 class="text-3xl sm:text-4xl font-bold rainbow-title mb-2">
+              CONGRATULATIONS, COLOUR MASTER!
+            </h1>
+            <p class="text-lg font-display font-bold text-slate-700 mb-4">
+              Student: <span class="text-sky-600">${escapeHtml(gameState.playerName.trim() || 'Super Explorer')}</span>
+            </p>
+
+            <!-- Evaluation Category Badge -->
+            <div class="inline-block px-7 py-3 rounded-3xl border-3 mb-6 ${cat.bg}">
+              <div class="text-xs font-bold uppercase text-slate-500">Evaluation Result (${pct}%)</div>
+              <div class="text-2xl sm:text-3xl font-display font-bold ${cat.color}">${cat.label}</div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+              <div class="p-4 rounded-2xl bg-amber-50 border-2 border-amber-200">
+                <div class="text-2xl font-display font-bold text-amber-600">${gameState.score}</div>
+                <div class="text-xs font-bold text-slate-600">Total Score</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-yellow-50 border-2 border-yellow-200">
+                <div class="text-2xl font-display font-bold text-yellow-600">${totalStars} ⭐</div>
+                <div class="text-xs font-bold text-slate-600">Total Stars</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200">
+                <div class="text-2xl font-display font-bold text-emerald-600">${gameState.correctTotal}</div>
+                <div class="text-xs font-bold text-slate-600">Correct Answers</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-rose-50 border-2 border-rose-200">
+                <div class="text-2xl font-display font-bold text-rose-600">${gameState.wrongTotal}</div>
+                <div class="text-xs font-bold text-slate-600">Wrong Attempts</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-sky-50 border-2 border-sky-200">
+                <div class="text-2xl font-display font-bold text-sky-600">${levelsDone} / 8</div>
+                <div class="text-xs font-bold text-slate-600">Levels Completed</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-purple-50 border-2 border-purple-200">
+                <div class="text-2xl font-display font-bold text-purple-600">${huntDone} / 12</div>
+                <div class="text-xs font-bold text-slate-600">Camera Challenges</div>
+              </div>
+            </div>
+
+            <!-- Encouraging Messages -->
+            <div class="bg-gradient-to-r from-pink-50 via-yellow-50 to-sky-50 rounded-2xl p-4 border-2 border-sky-200 mb-6 font-display font-bold text-slate-700 text-lg space-y-1">
+              <div>✨ "You are amazing!"</div>
+              <div>📚 "Keep learning English!"</div>
+              <div>🚀 "See you in the next adventure!"</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-3">
+              <button onclick="playAgainFromResults()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-6 py-3 text-base">
+                🔄 PLAY AGAIN
+              </button>
+              <button onclick="navigateTo('level1')" class="btn-game bg-amber-400 text-slate-900 border-amber-600 px-6 py-3 text-base">
+                🎨 REVIEW COLOURS
+              </button>
+              <button onclick="navigateTo('menu')" class="btn-game bg-sky-500 text-white border-sky-700 px-6 py-3 text-base">
+                🏠 BACK TO HOME
+              </button>
+              <button onclick="openTeacherModal('report')" class="btn-game bg-slate-700 text-white border-slate-900 px-5 py-3 text-base">
+                👩‍🏫 TEACHER REPORT
+              </button>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function playAgainFromResults() {
+      sfxClick();
+      startNewQuizSession();
+      navigateTo('level8');
+    }
+
+    /* =========================================================
+       18. TEACHER PANEL (MODE GURU) & CSV RESULT DOWNLOAD
+       ========================================================= */
+    function openTeacherModal(defaultTab = 'report') {
+      sfxClick();
+      renderTeacherModalContent(defaultTab);
+    }
+
+    function renderTeacherModalContent(tab) {
+      const pct = gameState.quizResult.taken ? gameState.quizResult.percentage : 0;
+      const cat = getEvaluationCategory(pct);
+
+      const tabs = [
+        { id: 'report', label: '📊 Rekap Hasil' },
+        { id: 'objectives', label: '🎯 Tujuan' },
+        { id: 'vocab', label: '📚 Vocabulary' },
+        { id: 'guide', label: '📖 Petunjuk' }
+      ];
+
+      let bodyHtml = '';
+
+      if (tab === 'report') {
+        bodyHtml = `
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+              <div class="p-3 rounded-2xl bg-sky-50 border border-sky-200">
+                <div class="text-xs text-slate-500 font-bold">Siswa</div>
+                <div class="font-display font-bold text-slate-800 truncate">${escapeHtml(gameState.playerName.trim() || 'Explorer')}</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
+                <div class="text-xs text-slate-500 font-bold">Total Skor</div>
+                <div class="font-display font-bold text-amber-700 text-lg">${gameState.score}</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200">
+                <div class="text-xs text-slate-500 font-bold">Nilai Quiz</div>
+                <div class="font-display font-bold text-emerald-700 text-lg">${gameState.quizResult.taken ? `${pct}% (${cat.label})` : 'Belum selesai'}</div>
+              </div>
+              <div class="p-3 rounded-2xl bg-purple-50 border border-purple-200">
+                <div class="text-xs text-slate-500 font-bold">Total Bintang</div>
+                <div class="font-display font-bold text-purple-700 text-lg">${getTotalStars()} / 24 ⭐</div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr class="bg-slate-100 text-slate-700">
+                    <th class="p-2.5 rounded-tl-xl">Level</th>
+                    <th class="p-2.5">Status</th>
+                    <th class="p-2.5">Progress</th>
+                    <th class="p-2.5 rounded-tr-xl">Bintang</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  ${LEVELS_META.map(lv => {
+                    const lp = gameState.levelProgress[lv.num];
+                    return `
+                      <tr>
+                        <td class="p-2.5 font-bold text-slate-800">${lv.title}</td>
+                        <td class="p-2.5">${lp.completed ? '<span class="text-emerald-600 font-bold">Selesai</span>' : '<span class="text-slate-400">Berjalan</span>'}</td>
+                        <td class="p-2.5 font-semibold">${lp.best || 0}%</td>
+                        <td class="p-2.5">${'⭐'.repeat(lp.stars || 0) || '-'}</td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="flex flex-wrap gap-2.5 pt-2">
+              <button onclick="downloadResultsCSV()" class="btn-game bg-emerald-500 text-white border-emerald-700 px-5 py-2.5 text-sm">
+                ⬇️ DOWNLOAD RESULT (CSV)
+              </button>
+              <button onclick="confirmResetAllProgress()" class="btn-game bg-rose-500 text-white border-rose-700 px-4 py-2.5 text-sm">
+                🗑️ Reset Progress Siswa
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (tab === 'objectives') {
+        bodyHtml = `
+          <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4 text-sm space-y-2 text-slate-700">
+            <div class="font-display font-bold text-sky-800 text-base">Bahasa Inggris SD Kelas 3 • Fase B • Materi: My Colours (30–45 Menit)</div>
+            <div class="text-xs sm:text-sm font-display font-bold text-purple-700">👩‍🏫 Pembuat Aplikasi: A. SUSILAWATI – SMAN 10 PINRANG</div>
+            <ol class="list-decimal pl-5 space-y-1 font-semibold">
+              <li>Mengidentifikasi 12 nama warna dalam bahasa Inggris.</li>
+              <li>Melafalkan nama warna dengan benar (Web Speech Audio).</li>
+              <li>Mencocokkan nama warna dengan visualnya (Drag & Drop).</li>
+              <li>Mengidentifikasi warna benda di lingkungan sekitar.</li>
+              <li>Memahami pertanyaan <em>"What colour is it?"</em></li>
+              <li>Menjawab menggunakan kalimat <em>"It is red."</em></li>
+              <li>Mengungkapkan warna kesukaan <em>"My favourite colour is blue."</em></li>
+              <li>Mengikuti instruksi sederhana dalam bahasa Inggris (Colouring).</li>
+              <li>Melakukan eksplorasi warna nyata melalui kamera perangkat.</li>
+            </ol>
+          </div>
+        `;
+      } else if (tab === 'vocab') {
+        bodyHtml = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm border-collapse">
+              <thead>
+                <tr class="bg-slate-100">
+                  <th class="p-2">Warna</th>
+                  <th class="p-2">Indonesia</th>
+                  <th class="p-2">Objek</th>
+                  <th class="p-2">Contoh Kalimat</th>
+                  <th class="p-2">Audio</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${COLOURS.map(c => `
+                  <tr>
+                    <td class="p-2 font-bold flex items-center gap-2">
+                      <span class="w-4 h-4 rounded-full border border-slate-400 inline-block ${c.isGold ? 'gold-swatch' : ''}" style="${c.isGold ? '' : `background:${c.hex};`}"></span>
+                      ${c.name}
+                    </td>
+                    <td class="p-2">${c.indo}</td>
+                    <td class="p-2">${c.object}</td>
+                    <td class="p-2 italic">${c.sentence}</td>
+                    <td class="p-2"><button onclick="speakColourCard('${c.id}')" class="px-2 py-1 rounded-lg bg-sky-100 text-sky-700 font-bold">🔊</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } else if (tab === 'guide') {
+        bodyHtml = `
+          <div class="space-y-3 text-sm text-slate-700 font-semibold">
+            <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200">
+              <strong>1. Alur Pembelajaran (30–45 Menit):</strong> Mulai dari Level 1 (Learn Colours) bersama-sama di kelas, lanjutkan Level 2–5 secara mandiri/berpasangan, eksplorasi benda nyata di kelas dengan Level 6–7 (Kamera), dan akhiri dengan Level 8 (Final Quiz).
+            </div>
+            <div class="p-3.5 rounded-2xl bg-purple-50 border border-purple-200">
+              <strong>2. Tips Fitur Kamera (Scan & Colour Hunt):</strong> Pastikan aplikasi dibuka lewat <strong>HTTPS</strong> atau <strong>localhost</strong>. Gunakan pencahayaan kelas yang terang dan arahkan benda berwarna polos ke kotak pemindai. Seluruh proses warna berjalan lokal di browser (privasi aman).
+            </div>
+            <div class="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200">
+              <strong>3. Ketergantungan Internet:</strong> Game berjalan mandiri dalam 1 file HTML. Koneksi internet hanya digunakan untuk memuat font & Tailwind CSS CDN; seluruh logika game, suara efek, dan deteksi kamera berjalan lokal di perangkat.
+            </div>
+          </div>
+        `;
+      }
+
+      openModal(`
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">👩‍🏫 Mode Guru (Teacher Panel)</h2>
+          <button onclick="closeModal()" class="btn-game bg-rose-500 text-white border-rose-700 px-3 py-1 text-sm">✖</button>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-4 pb-3 border-b-2 border-slate-100">
+          ${tabs.map(t => `
+            <button onclick="renderTeacherModalContent('${t.id}')" class="btn-game px-3.5 py-2 text-xs sm:text-sm ${
+              tab === t.id ? 'bg-sky-500 text-white border-sky-700' : 'bg-slate-100 text-slate-700 border-slate-300'
+            }">${t.label}</button>
+          `).join('')}
+        </div>
+
+        <div>${bodyHtml}</div>
+      `);
+    }
+
+    function downloadResultsCSV() {
+      const name = (gameState.playerName.trim() || 'Explorer').replace(/,/g, ' ');
+      const pct = gameState.quizResult.taken ? gameState.quizResult.percentage : 0;
+      const cat = gameState.quizResult.taken ? getEvaluationCategory(pct).label : 'NOT TAKEN';
+      const rows = [
+        ['Field', 'Value'],
+        ['Created By', 'A. SUSILAWATI - SMAN 10 PINRANG'],
+        ['Student Name', name],
+        ['Total Score', gameState.score],
+        ['Total Stars', `${getTotalStars()} / 24`],
+        ['Correct Answers', gameState.correctTotal],
+        ['Wrong Attempts', gameState.wrongTotal],
+        ['Levels Completed', `${getCompletedLevelsCount()} / 8`],
+        ['Camera Colours Discovered', `${gameState.scannedColours.length} / 12`],
+        ['Camera Hunt Succeeded', `${gameState.huntSuccessIds.length} / 12`],
+        ['Final Quiz Score (%)', `${pct}%`],
+        ['Final Quiz Category', cat],
+        ['', ''],
+        ['Level', 'Completed', 'Best Progress (%)', 'Stars']
+      ];
+
+      LEVELS_META.forEach(lv => {
+        const lp = gameState.levelProgress[lv.num];
+        rows.push([lv.title, lp.completed ? 'Yes' : 'No', `${lp.best || 0}%`, lp.stars || 0]);
+      });
+
+      const csvContent = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `MyColoursAdventure_Result_${name.replace(/\s+/g, '_')}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('📥 CSV Result downloaded!', 'success');
+    }
+
+    function confirmResetAllProgress() {
+      openModal(`
+        <div class="text-center">
+          <div class="text-5xl mb-3">⚠️</div>
+          <h3 class="text-2xl font-bold text-rose-600 mb-2">Reset All Progress?</h3>
+          <p class="text-slate-600 font-semibold mb-5">Semua skor, bintang, dan progres level di perangkat ini akan dimulai dari awal.</p>
+          <div class="flex justify-center gap-3">
+            <button onclick="openTeacherModal('report')" class="btn-game bg-slate-200 text-slate-700 border-slate-400 px-5 py-2.5">Batal</button>
+            <button onclick="executeResetAllProgress()" class="btn-game bg-rose-500 text-white border-rose-700 px-6 py-2.5">Ya, Reset Semua</button>
+          </div>
+        </div>
+      `);
+    }
+
+    function executeResetAllProgress() {
+      CameraEngine.stop();
+      stopBgm();
+      gameState = createDefaultState();
+      guessIndex = 0;
+      guessSolvedInSession = new Set();
+      matchedPairs = new Set();
+      completedColourTasks = new Set();
+      speakIdx = 0;
+      speakSolved = new Set();
+      huntQueue = [];
+      activeQuiz = [];
+      saveState();
+      closeModal();
+      showToast('🔄 Progress berhasil direset!', 'info');
+      navigateTo('welcome');
+    }
+
+    /* =========================================================
+       19. UTILITY HELPERS & INITIALIZATION
+       ========================================================= */
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Stop camera cleanly if tab is closed or hidden
+    window.addEventListener('beforeunload', () => CameraEngine.stop());
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && CameraEngine.isRunning) {
+        CameraEngine.stop();
+      }
+    });
+
+    // Boot Application
+    window.addEventListener('DOMContentLoaded', () => {
+      updateHud();
+      renderWelcome();
+    });
+  </script>
+</body>
+</html>
